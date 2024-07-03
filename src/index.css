@@ -1,0 +1,30 @@
+:root {
+  font-family: Inter, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at 20% 40%, #e1eeed 0%, #d4e0e7 90%);
+}
+
+button {
+  cursor: pointer;
+}
+
+button,
+input {
+  font-family: inherit;
+  border: none;
+  outline: none;
+}
+
+input {
+  box-sizing: border-box;
+}
