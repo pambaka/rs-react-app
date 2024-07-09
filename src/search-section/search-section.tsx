@@ -1,15 +1,15 @@
 import './search-section.css';
-import { Component, ReactNode, createRef } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import Button from '../button/button';
 import { SEARCH_VALUE } from '../consts';
 
-class SearchSection extends Component<{
-  fetchData: (value: string | undefined) => void;
-}> {
-  inputRef = createRef<HTMLInputElement>();
+function SearchSection(props: {
+  fetchData: (value: string | undefined) => Promise<void>;
+}): ReactNode {
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  handleClick = () => {
-    const value: string | undefined = this.inputRef.current?.value;
+  const handleClick = async () => {
+    const value: string | undefined = inputRef.current?.value;
 
     if (value) {
       localStorage.setItem(SEARCH_VALUE, value);
@@ -17,25 +17,28 @@ class SearchSection extends Component<{
       localStorage.removeItem(SEARCH_VALUE);
     }
 
-    this.props.fetchData(value);
+    await props.fetchData(value);
   };
 
-  componentDidMount(): void {
+  useEffect(() => {
     const searchValue: string | null = localStorage.getItem(SEARCH_VALUE);
-    if (searchValue && this.inputRef.current)
-      this.inputRef.current.value = searchValue;
-  }
 
-  render(): ReactNode {
-    return (
-      <>
-        <section className="search-section">
-          <input className="search-input" type="text" ref={this.inputRef} />
-          <Button buttonText={'Search'} callback={this.handleClick} />
-        </section>
-      </>
-    );
-  }
+    if (searchValue && inputRef.current) inputRef.current.value = searchValue;
+  }, []);
+
+  return (
+    <>
+      <section className="search-section">
+        <input className="search-input" type="text" ref={inputRef} />
+        <Button
+          buttonText={'Search'}
+          callback={() => {
+            handleClick().catch(() => {});
+          }}
+        />
+      </section>
+    </>
+  );
 }
 
 export default SearchSection;
