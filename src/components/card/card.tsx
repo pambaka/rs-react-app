@@ -4,14 +4,13 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
-  useCallback,
   useEffect,
   useState,
 } from 'react';
-import fetchCharacter from '../../api/fetch-character';
 import { Character } from '../../types';
 import Loader from '../loader/loader';
 import CardDetails from '../card-details/card-details';
+import api from '../../api/api';
 
 function Card(): ReactNode {
   const { charId } = useParams();
@@ -19,31 +18,13 @@ function Card(): ReactNode {
     Character | undefined,
     Dispatch<SetStateAction<Character | undefined>>,
   ] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+  const { data, isFetching } = api.useGetCharacterQuery(charId);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const getCharacter = useCallback(
-    async (id: string) => {
-      try {
-        setIsLoading(true);
-        if (charId) {
-          const data = await fetchCharacter(id);
-          setCharData(data);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [charId]
-  );
-
   useEffect(() => {
-    const wrapper = async () => {
-      if (charId) await getCharacter(charId);
-    };
-    wrapper().catch(() => {});
-  }, [charId, getCharacter]);
+    setCharData(data);
+  }, [data]);
 
   function closeCard() {
     navigate(`/?${searchParams.toString()}`);
@@ -59,7 +40,7 @@ function Card(): ReactNode {
           title="close"
           onClick={closeCard}
         ></button>
-        <Loader isLoading={isLoading}></Loader>
+        <Loader isLoading={isFetching}></Loader>
       </div>
     </>
   );
