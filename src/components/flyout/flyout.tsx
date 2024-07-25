@@ -25,7 +25,7 @@ const Flyout = (): ReactNode => {
 
   if (isFlyoutVisible)
     return (
-      <div className="flyout">
+      <div className="flyout" onClick={(event) => event.stopPropagation()}>
         <div>
           <p>
             Selected&nbsp;cards: <span>{selectedCards.length}</span>

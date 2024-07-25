@@ -11,7 +11,7 @@
   gap: 20px;
   border-radius: 4px;
   overflow-y: auto;
-  scrollbar-color: #d4e0e7 #fafbfc;
+  scrollbar-color: var(--color-gradient-2) var(--color-scroll-track);
   word-wrap: break-word;
 }
 
@@ -28,6 +28,6 @@
 .message {
   font-size: 1.2rem;
   font-weight: normal;
-  color: #787878;
+  color: var(--color-text);
   text-align: center;
 }
