@@ -29,7 +29,12 @@ class Cards extends Component<{ people: Character[] | undefined }> {
   }
 
   render(): ReactNode {
-    return <>{this.props.people && this.props.people.map((char: Character) => this.addCard(char))}</>;
+    return (
+      <>
+        {this.props.people &&
+          this.props.people.map((char: Character) => this.addCard(char))}
+      </>
+    );
   }
 }
 

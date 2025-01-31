@@ -3,7 +3,9 @@ import { Component, ReactNode, createRef } from 'react';
 import Button from '../button/button';
 import { SEARCH_VALUE } from '../consts';
 
-class SearchSection extends Component<{ fetchData: (value: string | undefined) => void }> {
+class SearchSection extends Component<{
+  fetchData: (value: string | undefined) => void;
+}> {
   inputRef = createRef<HTMLInputElement>();
 
   handleClick = () => {
@@ -20,7 +22,8 @@ class SearchSection extends Component<{ fetchData: (value: string | undefined) =
 
   componentDidMount(): void {
     const searchValue: string | null = localStorage.getItem(SEARCH_VALUE);
-    if (searchValue && this.inputRef.current) this.inputRef.current.value = searchValue;
+    if (searchValue && this.inputRef.current)
+      this.inputRef.current.value = searchValue;
   }
 
   render(): ReactNode {

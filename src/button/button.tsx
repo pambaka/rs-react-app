@@ -1,7 +1,11 @@
 import './button.css';
 import { Component, ReactNode } from 'react';
 
-class Button extends Component<{ buttonText: string; callback: () => void }> {
+class Button extends Component<{ buttonText?: string; callback?: () => void }> {
+  constructor(buttonText = '', callback = () => {}) {
+    super({ buttonText, callback });
+  }
+
   render(): ReactNode {
     return (
       <button className="button" onClick={this.props.callback}>

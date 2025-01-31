@@ -1,6 +1,4 @@
 .button {
-  width: 50%;
-  max-width: 160px;
   height: 100%;
   display: grid;
   place-content: center;

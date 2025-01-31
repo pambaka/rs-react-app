@@ -9,7 +9,8 @@ class Loader extends Component {
   };
 
   static hide = () => {
-    if (this.loaderRef.current) this.loaderRef.current.classList.remove('visible');
+    if (this.loaderRef.current)
+      this.loaderRef.current.classList.remove('visible');
   };
 
   render(): ReactNode {

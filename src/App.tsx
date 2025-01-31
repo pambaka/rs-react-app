@@ -6,8 +6,8 @@ import { SEARCH_VALUE, URL } from './consts';
 import { Character } from './types';
 import Loader from './loader/loader';
 import ErrorBoundary from './error-boundary';
-import ErrorButton from './error-button/error-button';
 import FallbackUi from './fallback-ui/fallback-ui';
+import Footer from './footer/footer';
 
 class App extends Component {
   state: { people: Character[] | undefined } = { people: undefined };
@@ -45,8 +45,8 @@ class App extends Component {
         <ErrorBoundary fallback={<FallbackUi />}>
           <SearchSection fetchData={this.getPeople} />
           <ResultsSection results={this.state.people} />
-          <ErrorButton buttonText="" callback={() => {}}></ErrorButton>
-          <Loader></Loader>
+          <Footer />
+          <Loader />
         </ErrorBoundary>
       </>
     );

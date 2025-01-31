@@ -3,7 +3,11 @@ import { Component, ReactNode } from 'react';
 
 class FallbackUi extends Component {
   render(): ReactNode {
-    return <p className="fallback-text">Something went wrong, please reload the page</p>;
+    return (
+      <p className="fallback-text">
+        Something went wrong, please reload the page
+      </p>
+    );
   }
 }
 

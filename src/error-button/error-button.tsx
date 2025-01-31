@@ -6,7 +6,13 @@ class ErrorButton extends Button {
 
   render(): ReactNode {
     if (this.state.hasError) throw new Error('This is a fallback UI test');
-    else return <Button buttonText="Throw error" callback={() => this.setState({ hasError: true })}></Button>;
+    else
+      return (
+        <Button
+          buttonText="Throw&nbsp;error"
+          callback={() => this.setState({ hasError: true })}
+        ></Button>
+      );
   }
 }
 
