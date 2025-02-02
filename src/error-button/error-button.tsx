@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 import Button from '../button/button';
 
-class ErrorButton extends Button {
+class ErrorButton extends Component {
   state = { hasError: false };
 
   render(): ReactNode {
