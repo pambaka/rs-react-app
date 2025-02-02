@@ -17,11 +17,15 @@
 
 @media screen and (max-width: 240px) {
   .results-section {
-    justify-content: flex-start;
+    justify-content: start;
   }
 }
 
-.not-found {
+.results-section:has(.message) {
+  display: flex;
+}
+
+.message {
   font-size: 1.2rem;
   color: #787878;
 }

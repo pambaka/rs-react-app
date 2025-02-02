@@ -5,9 +5,12 @@ import { Component, ReactNode } from 'react';
 
 class ResultsSection extends Component<{ results: Character[] | undefined }> {
   private renderContent(res: Character[] | undefined): ReactNode {
-    if (!res) return null;
+    if (!res)
+      return (
+        <div className="message">Something went wrong. Please try again.</div>
+      );
     else if (res.length === 0)
-      return <div className="not-found">Nothing was found :(</div>;
+      return <div className="message">Nothing was found :(</div>;
     else return <Cards people={this.props.results}></Cards>;
   }
 
