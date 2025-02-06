@@ -27,5 +27,6 @@
 
 .message {
   font-size: 1.2rem;
+  font-weight: normal;
   color: #787878;
 }

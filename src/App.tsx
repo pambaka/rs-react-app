@@ -8,6 +8,7 @@ import Loader from './components/loader/loader';
 import ErrorBoundary from './error-boundary';
 import FallbackUi from './components/fallback-ui/fallback-ui';
 import Footer from './components/footer/footer';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 function App(): ReactNode {
   const [people, setPeople]: [
@@ -45,14 +46,25 @@ function App(): ReactNode {
   }, []);
 
   return (
-    <>
-      <ErrorBoundary fallback={<FallbackUi />}>
-        <SearchSection fetchData={getPeople} />
-        <ResultsSection results={people} />
-        <Footer />
-        <Loader isLoading={isLoading} />
-      </ErrorBoundary>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ErrorBoundary fallback={<FallbackUi />}>
+              <SearchSection fetchData={getPeople} />
+              <ResultsSection results={people} />
+              <Footer />
+              <Loader isLoading={isLoading} />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path="*"
+          element={<h1 className="message">Page is not found</h1>}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
