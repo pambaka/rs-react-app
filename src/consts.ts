@@ -5,3 +5,8 @@ const BASE_URL = 'https://swapi.dev/api';
 export const URL = {
   people: `${BASE_URL}/people`,
 };
+
+export const PARAMS = {
+  search: 'search',
+  page: 'page',
+};
