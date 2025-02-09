@@ -7,4 +7,5 @@ export const mockChar: Character = {
   hair_color: 'someColor',
   eye_color: 'someColor',
   skin_color: 'someColor',
+  url: '',
 };

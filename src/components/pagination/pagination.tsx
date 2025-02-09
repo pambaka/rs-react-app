@@ -41,13 +41,19 @@ function Pagination(props: {
     <div className="pagination">
       <Button
         buttonText="<"
-        callback={() => updateCurrentPage('decrement')}
+        callback={(event) => {
+          event.stopPropagation();
+          updateCurrentPage('decrement');
+        }}
         isDisabled={props.isPrevDisabled}
       />
       <p>{currentPageNumber}</p>
       <Button
         buttonText=">"
-        callback={() => updateCurrentPage('increment')}
+        callback={(event) => {
+          event.stopPropagation();
+          updateCurrentPage('increment');
+        }}
         isDisabled={props.isNextDisabled}
       />
     </div>

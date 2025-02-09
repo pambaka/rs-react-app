@@ -1,3 +1,4 @@
+import './main-page.css';
 import { Dispatch, ReactNode, useEffect, useState } from 'react';
 import { Character } from '../../../types';
 import fetchPeople from '../../../api/fetch-people';
@@ -8,7 +9,7 @@ import ResultsSection from '../../results-section/results-section';
 import Pagination from '../../pagination/pagination';
 import Footer from '../../footer/footer';
 import Loader from '../../loader/loader';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import isValidPageNumber from '../../../utils/is-valid-page-number';
 
 function MainPage(): ReactNode {
@@ -22,6 +23,11 @@ function MainPage(): ReactNode {
   const [isPrevDisabled, setIsPrevDisabled] = useState(false);
   const [isPageReloaded, setIsPageReloaded] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [isOutletOpen, setIsOutletOpen] = useState(
+    location.pathname.includes('details')
+  );
 
   const getPeople = async (
     searchValue: string | null = '',
@@ -63,8 +69,20 @@ function MainPage(): ReactNode {
     getPeople(searchValue, isValidPageNumber(page) ? Number(page) : undefined);
   }, [isPageReloaded, searchParams, setSearchParams]);
 
+  useEffect(() => {
+    if (location.pathname.includes('details')) setIsOutletOpen(true);
+    else setIsOutletOpen(false);
+  }, [location.pathname]);
+
+  function closeOutlet() {
+    navigate(`/?${searchParams.toString()}`);
+  }
+
   return (
-    <>
+    <section
+      className={isOutletOpen ? `main-section interactive` : 'main-section'}
+      onClick={isOutletOpen ? closeOutlet : undefined}
+    >
       <SearchSection fetchData={getPeople} />
       <ResultsSection results={people} />
       <Pagination
@@ -74,7 +92,7 @@ function MainPage(): ReactNode {
       />
       <Footer />
       <Loader isLoading={isLoading} />
-    </>
+    </section>
   );
 }
 

@@ -7,7 +7,7 @@ function Button({
   isDisabled = false,
 }: {
   buttonText: string;
-  callback: () => void;
+  callback: (event: React.MouseEvent<HTMLElement>) => void;
   isDisabled?: boolean;
 }): ReactNode {
   return (

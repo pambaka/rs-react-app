@@ -40,8 +40,17 @@ function SearchSection(props: {
           type="text"
           value={inputValue}
           onChange={handleChange}
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
         ></input>
-        <Button buttonText={'Search'} callback={handleClick} />
+        <Button
+          buttonText={'Search'}
+          callback={(event) => {
+            event.stopPropagation();
+            handleClick();
+          }}
+        />
       </section>
     </>
   );
