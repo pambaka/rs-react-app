@@ -1,56 +1,33 @@
 import './App.css';
-import { Component, ReactNode } from 'react';
-import SearchSection from './search-section/search-section';
-import ResultsSection from './results-section/results-section';
-import { SEARCH_VALUE, URL } from './consts';
-import { Character } from './types';
-import Loader from './loader/loader';
+import { ReactNode } from 'react';
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
+import MainPage from './components/pages/main-page/main-page';
 import ErrorBoundary from './error-boundary';
-import FallbackUi from './fallback-ui/fallback-ui';
-import Footer from './footer/footer';
+import FallbackUi from './components/fallback-ui/fallback-ui';
+import Card from './components/card/card';
 
-class App extends Component {
-  state: { people: Character[] | undefined } = { people: undefined };
-
-  getPeople = async (searchValue: string | null = '') => {
-    const searchQuery = searchValue ? `/?search=${searchValue.trim()}` : '';
-
-    Loader.show();
-
-    await fetch(`${URL.people}${searchQuery}`)
-      .then((res) => {
-        if (!res.ok) return undefined;
-        return res.json();
-      })
-      .then((data) => {
-        if (data) this.setState({ people: data.results });
-      })
-      .catch(() => {
-        Loader.hide();
-      });
-  };
-
-  componentDidMount(): void {
-    const searchValue: string | null = localStorage.getItem(SEARCH_VALUE);
-    this.getPeople(searchValue);
-  }
-
-  componentDidUpdate(): void {
-    Loader.hide();
-  }
-
-  render(): ReactNode {
-    return (
-      <>
-        <ErrorBoundary fallback={<FallbackUi />}>
-          <SearchSection fetchData={this.getPeople} />
-          <ResultsSection results={this.state.people} />
-          <Footer />
-          <Loader />
-        </ErrorBoundary>
-      </>
-    );
-  }
+function App(): ReactNode {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ErrorBoundary fallback={<FallbackUi />}>
+              <MainPage />
+              <Outlet />
+            </ErrorBoundary>
+          }
+        >
+          <Route path="details/:charId" element={<Card />} />
+        </Route>
+        <Route
+          path="*"
+          element={<h1 className="message">Page is not found</h1>}
+        />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;

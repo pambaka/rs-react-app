@@ -1,11 +1,11 @@
 #root {
   width: 100vw;
-  max-width: 920px;
+  max-width: 1280px;
   height: 100vh;
   overflow-y: hidden;
   padding: 1rem;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: flex-start;
   gap: 20px;
 }
@@ -13,5 +13,11 @@
 @media screen and (max-height: 360px) {
   #root {
     overflow-y: auto;
+  }
+}
+
+@media screen and (max-width: 920px) {
+  #root {
+    justify-content: flex-start;
   }
 }
