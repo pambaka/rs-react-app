@@ -1,18 +1,34 @@
-import Card from '../components/cards/cards';
-import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import Card from '../components/card/card';
+import { describe, expect, it, vi } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { mockChar } from './mocks';
 
-describe('Card component', () => {
+const navigate = vi.fn();
+
+vi.mock('react-router-dom', async (importOriginal) => {
+  const actual: object = await importOriginal();
+  return {
+    ...actual,
+    useNavigate: () => navigate,
+  };
+});
+
+describe('Detailed card component', () => {
   render(
     <BrowserRouter>
-      <Card people={[mockChar]} />
+      <Card />
     </BrowserRouter>
   );
 
-  it('The card component renders the relevant card data', () => {
-    const title = screen.getByText(mockChar.name);
-    expect(title).toBeDefined();
+  it('Renders detailed card component', () => {
+    const card = screen.getByTestId('detailedCard');
+    expect(card).toBeDefined();
+  });
+
+  it('Close the card on close button click', () => {
+    const closeButton = screen.getByRole('button');
+    expect(closeButton).toBeInstanceOf(HTMLButtonElement);
+    fireEvent.click(closeButton);
+    expect(navigate).toBeCalledWith('/?');
   });
 });

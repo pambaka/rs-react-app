@@ -51,7 +51,7 @@ function Card(): ReactNode {
 
   return (
     <>
-      <div className="card-detailed">
+      <div className="card-detailed" data-testid="detailedCard">
         <CardDetails char={charData} />
         <button
           className="close-button"

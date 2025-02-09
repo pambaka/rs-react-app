@@ -17,22 +17,31 @@ function Pagination(props: {
     const page = searchParams.get(PARAMS.page);
     return getValidPageNumber(page);
   });
+  const [isButtonPressed, setIsButtonPressed] = useState(false);
 
   async function updateCurrentPage(action: PageAction) {
     const newPageNumber = changeCurrentPageNumber(currentPageNumber, action);
     if (newPageNumber === currentPageNumber) return;
 
+    setIsButtonPressed(true);
+
     const searchValue = searchParams.get(PARAMS.search) ?? '';
+    setSearchParams({
+      [PARAMS.search]: searchValue,
+      [PARAMS.page]: `${newPageNumber}`,
+    });
+
     await props.fetchData(searchValue, newPageNumber).then(() => {
       setCurrentPageNumber(newPageNumber);
-      setSearchParams({
-        [PARAMS.search]: searchValue,
-        [PARAMS.page]: `${newPageNumber}`,
-      });
     });
   }
 
   useEffect(() => {
+    if (isButtonPressed) {
+      setIsButtonPressed(false);
+      return;
+    }
+
     const page = searchParams.get(PARAMS.page);
     setCurrentPageNumber(getValidPageNumber(page));
   }, [searchParams]);
