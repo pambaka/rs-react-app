@@ -12,7 +12,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(circle at 20% 40%, #e1eeed 0%, #d4e0e7 90%);
+  background-color: #a2bbcb;
 }
 
 button {
