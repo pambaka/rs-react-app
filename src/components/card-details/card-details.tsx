@@ -1,10 +1,19 @@
 import { ReactNode } from 'react';
 import { Character } from '../../types';
+import { MESSAGES } from '../../consts';
 
-function CardDetails({ char }: { char: Character | undefined }): ReactNode {
-  if (!char) return <div></div>;
+function CardDetails({
+  char,
+  message,
+}: {
+  char: Character | undefined;
+  message?: string;
+}): ReactNode {
+  if (!char && message) return <div className="message">{message}</div>;
 
-  if (!char.name) return <div className="message">Character is not found</div>;
+  if (!char) return;
+
+  if (!char.name) return <div className="message">{MESSAGES.charNotFound}</div>;
 
   return (
     <>

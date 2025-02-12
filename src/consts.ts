@@ -10,3 +10,9 @@ export const PARAMS = {
   search: 'search',
   page: 'page',
 };
+
+export const MESSAGES = {
+  notFound: 'Nothing is found',
+  charNotFound: 'Character is not found',
+  somethingWrong: 'Something went wrong',
+};

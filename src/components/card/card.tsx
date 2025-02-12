@@ -11,6 +11,7 @@ import { Character } from '../../types';
 import Loader from '../loader/loader';
 import CardDetails from '../card-details/card-details';
 import api from '../../api/api';
+import { MESSAGES } from '../../consts';
 
 function Card(): ReactNode {
   const { charId } = useParams();
@@ -18,13 +19,18 @@ function Card(): ReactNode {
     Character | undefined,
     Dispatch<SetStateAction<Character | undefined>>,
   ] = useState();
-  const { data, isFetching } = api.useGetCharacterQuery(charId);
+  const [message, setMessage] = useState('');
+  const { data, error, isFetching } = api.useGetCharacterQuery(charId);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    setCharData(data);
-  }, [data]);
+    if (data) setCharData(data);
+
+    if (error && 'status' in error && error.status === 404)
+      setMessage(MESSAGES.charNotFound);
+    else if (error) setMessage(MESSAGES.somethingWrong);
+  }, [data, error]);
 
   function closeCard() {
     navigate(`/?${searchParams.toString()}`);
@@ -33,7 +39,7 @@ function Card(): ReactNode {
   return (
     <>
       <div className="card-detailed" data-testid="detailedCard">
-        <CardDetails char={charData} />
+        <CardDetails char={charData} message={message} />
         <button
           className="close-button"
           aria-label="Close card button"

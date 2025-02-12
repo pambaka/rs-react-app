@@ -4,6 +4,7 @@ import { Character } from '../types';
 import { cleanup, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { getChar } from './mocks';
+import { MESSAGES } from '../consts';
 
 describe('Results section component', () => {
   beforeEach(() => {
@@ -14,7 +15,7 @@ describe('Results section component', () => {
     const results: Character[] = [];
     render(<ResultsSection results={results}></ResultsSection>);
 
-    const message = screen.getByText('Nothing was found :(');
+    const message = screen.getByText(MESSAGES.notFound);
     expect(message).toBeInstanceOf(HTMLDivElement);
   });
 

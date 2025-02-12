@@ -8,7 +8,6 @@ import { useSearchParams } from 'react-router-dom';
 import getValidPageNumber from '../../utils/get-valid-page-number';
 
 function Pagination(props: {
-  fetchData: (searchValue: string, pageNumber?: number) => Promise<void>;
   isNextDisabled: boolean;
   isPrevDisabled: boolean;
 }): ReactNode {
@@ -17,31 +16,19 @@ function Pagination(props: {
     const page = searchParams.get(PARAMS.page);
     return getValidPageNumber(page);
   });
-  const [isButtonPressed, setIsButtonPressed] = useState(false);
 
-  async function updateCurrentPage(action: PageAction) {
+  async function updatePageNumber(action: PageAction) {
     const newPageNumber = changeCurrentPageNumber(currentPageNumber, action);
     if (newPageNumber === currentPageNumber) return;
-
-    setIsButtonPressed(true);
 
     const searchValue = searchParams.get(PARAMS.search) ?? '';
     setSearchParams({
       [PARAMS.search]: searchValue,
       [PARAMS.page]: `${newPageNumber}`,
     });
-
-    await props.fetchData(searchValue, newPageNumber).then(() => {
-      setCurrentPageNumber(newPageNumber);
-    });
   }
 
   useEffect(() => {
-    if (isButtonPressed) {
-      setIsButtonPressed(false);
-      return;
-    }
-
     const page = searchParams.get(PARAMS.page);
     setCurrentPageNumber(getValidPageNumber(page));
   }, [searchParams]);
@@ -52,7 +39,7 @@ function Pagination(props: {
         buttonText="<"
         callback={(event) => {
           event.stopPropagation();
-          updateCurrentPage('decrement');
+          updatePageNumber('decrement');
         }}
         isDisabled={props.isPrevDisabled}
       />
@@ -61,7 +48,7 @@ function Pagination(props: {
         buttonText=">"
         callback={(event) => {
           event.stopPropagation();
-          updateCurrentPage('increment');
+          updatePageNumber('increment');
         }}
         isDisabled={props.isNextDisabled}
       />

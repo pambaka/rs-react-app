@@ -1,20 +1,14 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import Pagination from '../components/pagination/pagination';
 import { PARAMS } from '../consts';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
-const fetchData = vi.fn(() => Promise.resolve());
-
 describe('Pagination component', () => {
   it('The component updates URL query parameter when page changes', async () => {
     render(
       <BrowserRouter>
-        <Pagination
-          fetchData={fetchData}
-          isNextDisabled={false}
-          isPrevDisabled={false}
-        />
+        <Pagination isNextDisabled={false} isPrevDisabled={false} />
       </BrowserRouter>
     );
 

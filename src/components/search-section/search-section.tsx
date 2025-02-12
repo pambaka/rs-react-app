@@ -6,25 +6,19 @@ import { useSearchParams } from 'react-router-dom';
 import { PARAMS } from '../../consts';
 import isValidPageNumber from '../../utils/is-valid-page-number';
 
-function SearchSection(props: {
-  fetchData: (value: string | undefined) => Promise<void>;
-}): ReactNode {
+function SearchSection(): ReactNode {
   const [searchValue, setSearchValue] = useLocalStorage();
   const [searchParams, setSearchParams] = useSearchParams();
   const [inputValue, setInputValue] = useState(() => {
     const search = searchParams.get(PARAMS.search);
     const page = searchParams.get(PARAMS.page);
-
     if (!search && !isValidPageNumber(page)) return searchValue;
-
     return search ?? '';
   });
 
   const handleClick = async () => {
     setSearchValue(inputValue);
     setSearchParams({ search: inputValue });
-
-    await props.fetchData(inputValue);
   };
 
   const handleChange = (event: ChangeEvent) => {
