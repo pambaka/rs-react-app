@@ -2,21 +2,30 @@ import './cards.css';
 import { Character } from '../../types';
 import { ReactNode } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import HeartIcon from '../icons/heart-icon';
+import { useDispatch } from 'react-redux';
+import { addToSelected } from '../../store/selected-cards-slice';
 
-function Cards({ people }: { people: Character[] | undefined }): ReactNode {
+const Cards = ({ people }: { people: Character[] | undefined }): ReactNode => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  function addCard(char: Character): ReactNode {
-    function getCharId(url: string): string {
+  const addCard = (char: Character): ReactNode => {
+    const getCharId = (url: string): string => {
       const id: string = url.split('people/')[1].replace('/', '');
       return id;
-    }
+    };
 
-    function showDetails(event: React.MouseEvent<HTMLElement>) {
+    const showDetails = (event: React.MouseEvent<HTMLElement>) => {
       event.stopPropagation();
       navigate(`details/${getCharId(char.url)}/?${searchParams.toString()}`);
-    }
+    };
+
+    const handleLabelClick = (event: React.MouseEvent<HTMLLabelElement>) => {
+      event.stopPropagation();
+      dispatch(addToSelected({ char }));
+    };
 
     return (
       <div
@@ -34,11 +43,21 @@ function Cards({ people }: { people: Character[] | undefined }): ReactNode {
             eyes: <span>{char.eye_color}</span>
           </p>
         </div>
+        <label onClick={handleLabelClick}>
+          <input
+            className="card__checkbox"
+            type="checkbox"
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+          ></input>
+          <HeartIcon />
+        </label>
       </div>
     );
-  }
+  };
 
   return <>{people && people.map((char: Character) => addCard(char))}</>;
-}
+};
 
 export default Cards;

@@ -2,17 +2,17 @@ import './index.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
-import { ApiProvider } from '@reduxjs/toolkit/query/react';
-import api from './api/api.ts';
+import { Provider } from 'react-redux';
+import store from './store/store.ts';
 
 const root = document.getElementById('root');
 
 if (root) {
   createRoot(root).render(
     <StrictMode>
-      <ApiProvider api={api}>
+      <Provider store={store}>
         <App />
-      </ApiProvider>
+      </Provider>
     </StrictMode>
   );
 }
