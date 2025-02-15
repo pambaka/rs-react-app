@@ -4,7 +4,11 @@ import { ReactNode } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import HeartIcon from '../icons/heart-icon';
 import { useDispatch } from 'react-redux';
-import { addToSelected } from '../../store/selected-cards-slice';
+import {
+  addToSelected,
+  removeFromSelected,
+} from '../../store/selected-cards-slice';
+import getCharId from '../../utils/get-character-id';
 
 const Cards = ({ people }: { people: Character[] | undefined }): ReactNode => {
   const [searchParams] = useSearchParams();
@@ -12,28 +16,22 @@ const Cards = ({ people }: { people: Character[] | undefined }): ReactNode => {
   const dispatch = useDispatch();
 
   const addCard = (char: Character): ReactNode => {
-    const getCharId = (url: string): string => {
-      const id: string = url.split('people/')[1].replace('/', '');
-      return id;
-    };
+    const charId = getCharId(char.url);
 
     const showDetails = (event: React.MouseEvent<HTMLElement>) => {
       event.stopPropagation();
-      navigate(`details/${getCharId(char.url)}/?${searchParams.toString()}`);
+      navigate(`details/${charId}/?${searchParams.toString()}`);
     };
 
-    const handleLabelClick = (event: React.MouseEvent<HTMLLabelElement>) => {
+    const handleCheckboxClick = (event: React.MouseEvent<HTMLInputElement>) => {
       event.stopPropagation();
-      dispatch(addToSelected({ char }));
+
+      if (event.currentTarget.checked) dispatch(addToSelected({ char }));
+      else dispatch(removeFromSelected({ id: charId }));
     };
 
     return (
-      <div
-        id={getCharId(char.url)}
-        className="card"
-        key={getCharId(char.url)}
-        onClick={showDetails}
-      >
+      <div id={charId} className="card" key={charId} onClick={showDetails}>
         <h2 className="card__title">{char.name}</h2>
         <div className="card__description">
           <p>
@@ -43,13 +41,15 @@ const Cards = ({ people }: { people: Character[] | undefined }): ReactNode => {
             eyes: <span>{char.eye_color}</span>
           </p>
         </div>
-        <label onClick={handleLabelClick}>
+        <label
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
+        >
           <input
             className="card__checkbox"
             type="checkbox"
-            onClick={(event) => {
-              event.stopPropagation();
-            }}
+            onClick={handleCheckboxClick}
           ></input>
           <HeartIcon />
         </label>
