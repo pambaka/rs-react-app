@@ -5,11 +5,11 @@ import { MESSAGES, PARAMS, SEARCH_VALUE } from '../../../consts';
 import SearchSection from '../../search-section/search-section';
 import ResultsSection from '../../results-section/results-section';
 import Pagination from '../../pagination/pagination';
-import Footer from '../../footer/footer';
 import Loader from '../../loader/loader';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import isValidPageNumber from '../../../utils/is-valid-page-number';
 import api from '../../../api/api';
+import Flyout from '../../flyout/flyout';
 
 function MainPage(): ReactNode {
   const [isNextDisabled, setIsNextDisabled] = useState(false);
@@ -79,7 +79,7 @@ function MainPage(): ReactNode {
         isNextDisabled={isNextDisabled}
         isPrevDisabled={isPrevDisabled}
       />
-      <Footer />
+      <Flyout />
       <Loader isLoading={isFetching} />
     </section>
   );
