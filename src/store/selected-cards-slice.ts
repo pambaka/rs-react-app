@@ -24,7 +24,11 @@ export const selectedCardsSlice = createSlice({
       updatedCards.splice(charIndex, 1);
       state.cards = updatedCards;
     },
+    unselectAll(state) {
+      state.cards.length = 0;
+    },
   },
 });
 
-export const { addToSelected, removeFromSelected } = selectedCardsSlice.actions;
+export const { addToSelected, removeFromSelected, unselectAll } =
+  selectedCardsSlice.actions;

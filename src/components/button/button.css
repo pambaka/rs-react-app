@@ -2,6 +2,7 @@
   height: 100%;
   display: grid;
   place-content: center;
+  align-self: flex-end;
   padding: 5px 10px;
   border-radius: 4px;
   background-color: #a2bbcb;
@@ -11,7 +12,7 @@
   transition: 0.2s;
 }
 
-.button:active(:not(:disabled)) {
+.button:active:not(:disabled) {
   height: calc(100% - 2px);
   box-shadow:
     0 -2px 0 #bbcdd9,

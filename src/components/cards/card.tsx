@@ -1,25 +1,32 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Character } from '../../types';
 import './card.css';
 import getCharId from '../../utils/get-character-id';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   addToSelected,
   removeFromSelected,
 } from '../../store/selected-cards-slice';
 import HeartIcon from '../icons/heart-icon';
-import store from '../../store/store';
+import { StoreRootState } from '../../store/store';
+import isCardSelected from './is-card-selected';
 
 const Card = ({ char }: { char: Character }): ReactNode => {
   const charId = getCharId(char.url);
-  const selectedCards = store.getState().selectedCards.cards;
-  const [isCardSelected, setIsCardSelected] = useState(() => {
-    return selectedCards.map((char) => getCharId(char.url)).includes(charId);
-  });
+  const selectedCards = useSelector<StoreRootState, Character[]>(
+    (state) => state.selectedCards.cards
+  );
+  const [isSelected, setIsSelected] = useState(() =>
+    isCardSelected(selectedCards, charId)
+  );
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setIsSelected(isCardSelected(selectedCards, charId));
+  }, [selectedCards, charId]);
 
   const showDetails = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
@@ -27,7 +34,7 @@ const Card = ({ char }: { char: Character }): ReactNode => {
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsCardSelected(!isCardSelected);
+    setIsSelected(!isSelected);
 
     if (event.currentTarget.checked) dispatch(addToSelected({ char }));
     else dispatch(removeFromSelected({ id: charId }));
@@ -52,7 +59,7 @@ const Card = ({ char }: { char: Character }): ReactNode => {
         <input
           className="card__checkbox"
           type="checkbox"
-          checked={isCardSelected}
+          checked={isSelected}
           onClick={(event) => {
             event.stopPropagation();
           }}
