@@ -5,6 +5,8 @@ import { StoreRootState } from '../../store/store';
 import { Character } from '../../types';
 import Button from '../button/button';
 import { unselectAll } from '../../store/selected-cards-slice';
+import { Link } from 'react-router-dom';
+import getBlobParts from './get-blob-parts';
 
 const Flyout = (): ReactNode => {
   const selectedCards = useSelector<StoreRootState, Character[]>(
@@ -12,6 +14,14 @@ const Flyout = (): ReactNode => {
   );
   const isFlyoutVisible = Boolean(selectedCards.length);
   const dispatch = useDispatch();
+
+  const getUrl = (): string => {
+    const csvData = getBlobParts(selectedCards);
+    const blob = new Blob(['\uFEFF', ...csvData], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+
+    return url;
+  };
 
   if (isFlyoutVisible)
     return (
@@ -26,7 +36,18 @@ const Flyout = (): ReactNode => {
               event.stopPropagation();
               dispatch(unselectAll());
             }}
-          ></Button>
+          />
+          <Link
+            to={getUrl()}
+            download={`${selectedCards.length}_characters.csv`}
+          >
+            <Button
+              buttonText="Download"
+              callback={(event) => {
+                event.stopPropagation();
+              }}
+            />
+          </Link>
         </div>
       </div>
     );
