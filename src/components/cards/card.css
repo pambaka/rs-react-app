@@ -33,7 +33,7 @@
   color: #446478;
 }
 
-label {
+.card label {
   width: 24px;
   height: 20px;
   align-self: flex-end;

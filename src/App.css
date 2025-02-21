@@ -6,8 +6,6 @@
   padding: 1rem;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  gap: 20px;
 }
 
 @media screen and (max-height: 360px) {
@@ -17,7 +15,16 @@
 }
 
 @media screen and (max-width: 920px) {
-  #root {
+  #root,
+  #root > .app {
     justify-content: flex-start;
   }
+}
+
+.app {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
 }

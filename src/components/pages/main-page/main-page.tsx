@@ -10,6 +10,7 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import isValidPageNumber from '../../../utils/is-valid-page-number';
 import api from '../../../api/api';
 import Flyout from '../../flyout/flyout';
+import ThemeButton from '../../theme-button';
 
 function MainPage(): ReactNode {
   const [isNextDisabled, setIsNextDisabled] = useState(false);
@@ -73,6 +74,7 @@ function MainPage(): ReactNode {
       className={isOutletOpen ? `main-section interactive` : 'main-section'}
       onClick={isOutletOpen ? closeOutlet : undefined}
     >
+      <ThemeButton />
       <SearchSection />
       <ResultsSection results={response?.results} message={message} />
       <Pagination
