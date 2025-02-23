@@ -2,6 +2,8 @@ import Card from '../components/card/card';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from '../store/store';
 
 const navigate = vi.fn();
 
@@ -15,9 +17,11 @@ vi.mock('react-router-dom', async (importOriginal) => {
 
 describe('Detailed card component', () => {
   render(
-    <BrowserRouter>
-      <Card />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Card />
+      </BrowserRouter>
+    </Provider>
   );
 
   it('Renders detailed card component', () => {
