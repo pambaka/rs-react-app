@@ -1,3 +1,4 @@
+import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { URL } from '../consts';
 import { Character } from '../types';
 
@@ -22,3 +23,16 @@ export function getChar(id: number): Character {
     url: `${URL.people}/${id}`,
   };
 }
+
+const initialState: { cards: Character[] } = { cards: [mockChar] };
+const selectedCardsSlice = createSlice({
+  name: 'selectedCards',
+  initialState,
+  reducers: {},
+});
+
+export const mockStore = configureStore({
+  reducer: {
+    selectedCards: selectedCardsSlice.reducer,
+  },
+});

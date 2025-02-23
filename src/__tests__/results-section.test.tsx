@@ -3,7 +3,9 @@ import { MemoryRouter } from 'react-router-dom';
 import { Character } from '../types';
 import { cleanup, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { getChar } from './mocks';
+import { getChar, mockStore } from './mocks';
+import { MESSAGES } from '../consts';
+import { Provider } from 'react-redux';
 
 describe('Results section component', () => {
   beforeEach(() => {
@@ -14,7 +16,7 @@ describe('Results section component', () => {
     const results: Character[] = [];
     render(<ResultsSection results={results}></ResultsSection>);
 
-    const message = screen.getByText('Nothing was found :(');
+    const message = screen.getByText(MESSAGES.notFound);
     expect(message).toBeInstanceOf(HTMLDivElement);
   });
 
@@ -27,9 +29,11 @@ describe('Results section component', () => {
     }
 
     render(
-      <MemoryRouter>
-        <ResultsSection results={results} />
-      </MemoryRouter>
+      <Provider store={mockStore}>
+        <MemoryRouter>
+          <ResultsSection results={results} />
+        </MemoryRouter>
+      </Provider>
     );
 
     const cards = screen.getAllByText('someName');

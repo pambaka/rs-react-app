@@ -4,14 +4,14 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
-  useCallback,
   useEffect,
   useState,
 } from 'react';
-import fetchCharacter from '../../api/fetch-character';
 import { Character } from '../../types';
 import Loader from '../loader/loader';
 import CardDetails from '../card-details/card-details';
+import api from '../../api/api';
+import { MESSAGES } from '../../consts';
 
 function Card(): ReactNode {
   const { charId } = useParams();
@@ -19,31 +19,18 @@ function Card(): ReactNode {
     Character | undefined,
     Dispatch<SetStateAction<Character | undefined>>,
   ] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [message, setMessage] = useState('');
+  const { data, error, isFetching } = api.useGetCharacterQuery(charId);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const getCharacter = useCallback(
-    async (id: string) => {
-      try {
-        setIsLoading(true);
-        if (charId) {
-          const data = await fetchCharacter(id);
-          setCharData(data);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [charId]
-  );
-
   useEffect(() => {
-    const wrapper = async () => {
-      if (charId) await getCharacter(charId);
-    };
-    wrapper().catch(() => {});
-  }, [charId, getCharacter]);
+    if (data) setCharData(data);
+
+    if (error && 'status' in error && error.status === 404)
+      setMessage(MESSAGES.charNotFound);
+    else if (error) setMessage(MESSAGES.somethingWrong);
+  }, [data, error]);
 
   function closeCard() {
     navigate(`/?${searchParams.toString()}`);
@@ -52,14 +39,14 @@ function Card(): ReactNode {
   return (
     <>
       <div className="card-detailed" data-testid="detailedCard">
-        <CardDetails char={charData} />
+        <CardDetails char={charData} message={message} />
         <button
           className="close-button"
           aria-label="Close card button"
           title="close"
           onClick={closeCard}
         ></button>
-        <Loader isLoading={isLoading}></Loader>
+        <Loader isLoading={isFetching}></Loader>
       </div>
     </>
   );

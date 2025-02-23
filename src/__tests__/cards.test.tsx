@@ -2,18 +2,21 @@ import Card from '../components/cards/cards';
 import { describe, expect, it } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { getChar, mockChar } from './mocks';
+import { getChar, mockChar, mockStore } from './mocks';
+import { Provider } from 'react-redux';
 
 const id = 2;
 const testId = 'testId';
 
 describe('Card component', () => {
   render(
-    <BrowserRouter>
-      <div data-testid={testId}>
-        <Card people={[getChar(id)]} />
-      </div>
-    </BrowserRouter>
+    <Provider store={mockStore}>
+      <BrowserRouter>
+        <div data-testid={testId}>
+          <Card people={[getChar(id)]} />
+        </div>
+      </BrowserRouter>
+    </Provider>
   );
 
   it('The card component renders the relevant card data', () => {

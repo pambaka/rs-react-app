@@ -4,8 +4,6 @@ import { describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { SEARCH_VALUE } from '../consts';
 
-const fetchData = vi.fn(() => Promise.resolve());
-
 const inputValue = 'testValue';
 
 const getItemSpy = vi.spyOn(Storage.prototype, 'getItem');
@@ -14,7 +12,7 @@ const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
 describe('Search section component', () => {
   render(
     <MemoryRouter>
-      <SearchSection fetchData={fetchData} />
+      <SearchSection />
     </MemoryRouter>
   );
 
