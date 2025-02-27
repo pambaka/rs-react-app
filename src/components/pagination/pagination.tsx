@@ -1,23 +1,26 @@
 import './pagination.css';
 import { ReactNode, useEffect, useState } from 'react';
-import Button from '../button/button';
+import Button from '../button';
 import changeCurrentPageNumber from './change-current-page-number';
-import { PageAction } from '../../types';
-import { PARAMS } from '../../consts';
+import { PageAction } from '@/types';
+import { PARAMS } from '@/consts';
 import { useSearchParams } from 'react-router-dom';
-import getValidPageNumber from '../../utils/get-valid-page-number';
+import getValidPageNumber from '@/utils/get-valid-page-number';
 
-function Pagination(props: {
+const Pagination = ({
+  isNextDisabled,
+  isPrevDisabled,
+}: {
   isNextDisabled: boolean;
   isPrevDisabled: boolean;
-}): ReactNode {
+}): ReactNode => {
   const [searchParams, setSearchParams] = useSearchParams({});
   const [currentPageNumber, setCurrentPageNumber] = useState(() => {
     const page = searchParams.get(PARAMS.page);
     return getValidPageNumber(page);
   });
 
-  async function updatePageNumber(action: PageAction) {
+  const updatePageNumber = async (action: PageAction) => {
     const newPageNumber = changeCurrentPageNumber(currentPageNumber, action);
     if (newPageNumber === currentPageNumber) return;
 
@@ -26,7 +29,7 @@ function Pagination(props: {
       [PARAMS.search]: searchValue,
       [PARAMS.page]: `${newPageNumber}`,
     });
-  }
+  };
 
   useEffect(() => {
     const page = searchParams.get(PARAMS.page);
@@ -37,23 +40,23 @@ function Pagination(props: {
     <div className="pagination">
       <Button
         buttonText="<"
-        callback={(event) => {
+        onClick={(event) => {
           event.stopPropagation();
           updatePageNumber('decrement');
         }}
-        isDisabled={props.isPrevDisabled}
+        isDisabled={isPrevDisabled}
       />
       <p>{currentPageNumber}</p>
       <Button
         buttonText=">"
-        callback={(event) => {
+        onClick={(event) => {
           event.stopPropagation();
           updatePageNumber('increment');
         }}
-        isDisabled={props.isNextDisabled}
+        isDisabled={isNextDisabled}
       />
     </div>
   );
-}
+};
 
 export default Pagination;

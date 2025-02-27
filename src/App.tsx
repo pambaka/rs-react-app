@@ -1,13 +1,13 @@
 import './App.css';
 import { ReactNode, useState } from 'react';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
-import MainPage from './components/pages/main-page/main-page';
+import MainPage from './components/pages/main-page';
 import ErrorBoundary from './error-boundary';
-import FallbackUi from './components/fallback-ui/fallback-ui';
-import Card from './components/card/card';
-import ThemeContext from './context/theme-context/theme-context';
+import FallbackUi from './components/fallback-ui';
+import Card from './components/card';
+import ThemeContext from './context/theme-context';
 
-function App(): ReactNode {
+const App = (): ReactNode => {
   const [isLightThemeSet, setIsLightThemeSet] = useState(true);
 
   const toggleTheme = () => {
@@ -39,6 +39,6 @@ function App(): ReactNode {
       </div>
     </ThemeContext.Provider>
   );
-}
+};
 
 export default App;

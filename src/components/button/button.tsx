@@ -1,20 +1,20 @@
 import './button.css';
 import { ReactNode } from 'react';
 
-function Button({
+const Button = ({
   buttonText,
-  callback,
+  onClick,
   isDisabled = false,
 }: {
   buttonText: string;
-  callback: (event: React.MouseEvent<HTMLElement>) => void;
+  onClick: (event: React.MouseEvent<HTMLElement>) => void;
   isDisabled?: boolean;
-}): ReactNode {
+}): ReactNode => {
   return (
-    <button className="button" onClick={callback} disabled={isDisabled}>
+    <button className="button" onClick={onClick} disabled={isDisabled}>
       <span>{buttonText}</span>
     </button>
   );
-}
+};
 
 export default Button;

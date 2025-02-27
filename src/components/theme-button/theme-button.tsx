@@ -1,11 +1,11 @@
 import './theme-button.css';
-import ThemeContext from '../../context/theme-context/theme-context';
-import MoonIcon from '../icons/moon-icon';
-import SunIcon from '../icons/sun-icon';
+import ThemeContext from '@/context/theme-context';
 import { ReactNode, useContext } from 'react';
+import { MoonIcon, SunIcon } from '../icons';
 
-function ThemeButton(): ReactNode {
+const ThemeButton = (): ReactNode => {
   const { isLightThemeSet, toggleTheme } = useContext(ThemeContext);
+
   return (
     <div
       className="theme-button"
@@ -29,5 +29,6 @@ function ThemeButton(): ReactNode {
       </label>
     </div>
   );
-}
+};
+
 export default ThemeButton;

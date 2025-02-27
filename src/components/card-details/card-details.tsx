@@ -1,14 +1,14 @@
 import { ReactNode } from 'react';
-import { Character } from '../../types';
-import { MESSAGES } from '../../consts';
+import { Character } from '@/types';
+import { MESSAGES } from '@/consts';
 
-function CardDetails({
+const CardDetails = ({
   char,
   message,
 }: {
   char: Character | undefined;
   message?: string;
-}): ReactNode {
+}): ReactNode => {
   if (!char && message) return <div className="message">{message}</div>;
 
   if (!char) return;
@@ -37,6 +37,6 @@ function CardDetails({
       </div>
     </>
   );
-}
+};
 
 export default CardDetails;

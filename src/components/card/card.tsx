@@ -7,13 +7,13 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { Character } from '../../types';
-import Loader from '../loader/loader';
-import CardDetails from '../card-details/card-details';
-import api from '../../api/api';
-import { MESSAGES } from '../../consts';
+import { Character } from '@/types';
+import Loader from '@/components/loader';
+import CardDetails from '@/components/card-details';
+import api from '@/api/api';
+import { MESSAGES } from '@/consts';
 
-function Card(): ReactNode {
+const Card = (): ReactNode => {
   const { charId } = useParams();
   const [charData, setCharData]: [
     Character | undefined,
@@ -32,9 +32,9 @@ function Card(): ReactNode {
     else if (error) setMessage(MESSAGES.somethingWrong);
   }, [data, error]);
 
-  function closeCard() {
+  const closeCard = () => {
     navigate(`/?${searchParams.toString()}`);
-  }
+  };
 
   return (
     <>
@@ -46,10 +46,10 @@ function Card(): ReactNode {
           title="close"
           onClick={closeCard}
         ></button>
-        <Loader isLoading={isFetching}></Loader>
+        {isFetching && <Loader />}
       </div>
     </>
   );
-}
+};
 
 export default Card;

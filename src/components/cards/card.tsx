@@ -1,15 +1,15 @@
-import { ReactNode, useEffect, useState } from 'react';
-import { Character } from '../../types';
 import './card.css';
-import getCharId from '../../utils/get-character-id';
+import { ReactNode, useEffect, useState } from 'react';
+import { Character } from '@/types';
+import getCharId from '@/utils/get-character-id';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addToSelected,
   removeFromSelected,
-} from '../../store/selected-cards-slice';
-import HeartIcon from '../icons/heart-icon';
-import { StoreRootState } from '../../store/store';
+} from '@/store/selected-cards-slice';
+import { HeartIcon } from '../icons';
+import { StoreRootState } from '@/store/store';
 import isCardSelected from './is-card-selected';
 
 const Card = ({ char }: { char: Character }): ReactNode => {

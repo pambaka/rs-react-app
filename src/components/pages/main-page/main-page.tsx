@@ -1,18 +1,17 @@
 import './main-page.css';
 import { ReactNode, useEffect, useState } from 'react';
-import isPageButtonDisabled from '../../pagination/is-page-button-disabled';
-import { MESSAGES, PARAMS, SEARCH_VALUE } from '../../../consts';
-import SearchSection from '../../search-section/search-section';
-import ResultsSection from '../../results-section/results-section';
-import Pagination from '../../pagination/pagination';
-import Loader from '../../loader/loader';
+import { MESSAGES, PARAMS, SEARCH_VALUE } from '@/consts';
+import SearchSection from '@/components/search-section';
+import ResultsSection from '@/components/results-section';
+import Pagination, { isPageButtonDisabled } from '@/components/pagination';
+import Loader from '@/components/loader';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import isValidPageNumber from '../../../utils/is-valid-page-number';
-import api from '../../../api/api';
-import Flyout from '../../flyout/flyout';
-import ThemeButton from '../../theme-button';
+import isValidPageNumber from '@/utils/is-valid-page-number';
+import api from '@/api/api';
+import Flyout from '@/components/flyout';
+import ThemeButton from '@/components/theme-button';
 
-function MainPage(): ReactNode {
+const MainPage = (): ReactNode => {
   const [isNextDisabled, setIsNextDisabled] = useState(false);
   const [isPrevDisabled, setIsPrevDisabled] = useState(false);
   const [isPageReloaded, setIsPageReloaded] = useState(false);
@@ -65,9 +64,9 @@ function MainPage(): ReactNode {
     else setIsOutletOpen(false);
   }, [location.pathname]);
 
-  function closeOutlet() {
+  const closeOutlet = (): void => {
     navigate(`/?${searchParams.toString()}`);
-  }
+  };
 
   return (
     <section
@@ -82,9 +81,9 @@ function MainPage(): ReactNode {
         isPrevDisabled={isPrevDisabled}
       />
       <Flyout />
-      <Loader isLoading={isFetching} />
+      {isFetching && <Loader />}
     </section>
   );
-}
+};
 
 export default MainPage;

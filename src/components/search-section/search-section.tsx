@@ -1,12 +1,12 @@
 import './search-section.css';
 import { ChangeEvent, ReactNode, useState } from 'react';
-import Button from '../button/button';
-import useLocalStorage from '../../hooks/use-local-storage';
+import Button from '../button';
+import useLocalStorage from '@/hooks/use-local-storage';
 import { useSearchParams } from 'react-router-dom';
-import { PARAMS } from '../../consts';
-import isValidPageNumber from '../../utils/is-valid-page-number';
+import { PARAMS } from '@/consts';
+import isValidPageNumber from '@/utils/is-valid-page-number';
 
-function SearchSection(): ReactNode {
+const SearchSection = (): ReactNode => {
   const [searchValue, setSearchValue] = useLocalStorage();
   const [searchParams, setSearchParams] = useSearchParams();
   const [inputValue, setInputValue] = useState(() => {
@@ -40,7 +40,7 @@ function SearchSection(): ReactNode {
         ></input>
         <Button
           buttonText={'Search'}
-          callback={(event) => {
+          onClick={(event) => {
             event.stopPropagation();
             handleClick();
           }}
@@ -48,6 +48,6 @@ function SearchSection(): ReactNode {
       </section>
     </>
   );
-}
+};
 
 export default SearchSection;

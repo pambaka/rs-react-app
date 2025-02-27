@@ -1,10 +1,10 @@
 import './flyout.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReactNode } from 'react';
-import { StoreRootState } from '../../store/store';
-import { Character } from '../../types';
-import Button from '../button/button';
-import { unselectAll } from '../../store/selected-cards-slice';
+import { StoreRootState } from '@/store/store';
+import { Character } from '@/types';
+import Button from '@/components/button';
+import { unselectAll } from '@/store/selected-cards-slice';
 import { Link } from 'react-router-dom';
 import getBlobParts from './get-blob-parts';
 
@@ -32,7 +32,7 @@ const Flyout = (): ReactNode => {
           </p>
           <Button
             buttonText="Unselect&nbsp;all"
-            callback={(event) => {
+            onClick={(event) => {
               event.stopPropagation();
               dispatch(unselectAll());
             }}
@@ -43,7 +43,7 @@ const Flyout = (): ReactNode => {
           >
             <Button
               buttonText="Download"
-              callback={(event) => {
+              onClick={(event) => {
                 event.stopPropagation();
               }}
             />
@@ -53,4 +53,5 @@ const Flyout = (): ReactNode => {
     );
   else return null;
 };
+
 export default Flyout;
