@@ -1,14 +1,14 @@
-import './theme-button.css';
+import styles from './theme-button.module.css';
 import ThemeContext from '@/context/theme-context';
 import { ReactNode, useContext } from 'react';
-import { MoonIcon, SunIcon } from '../icons';
+import { MoonIcon, SunIcon } from '@/components/icons';
 
 const ThemeButton = (): ReactNode => {
   const { isLightThemeSet, toggleTheme } = useContext(ThemeContext);
 
   return (
     <div
-      className="theme-button"
+      className={styles['theme-button']}
       onClick={(event) => {
         event.stopPropagation();
       }}

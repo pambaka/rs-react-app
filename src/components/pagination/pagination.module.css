@@ -1,0 +1,21 @@
+.pagination {
+  height: 40px;
+  align-self: flex-start;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.pagination p {
+  width: 30px;
+  align-self: center;
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: 500;
+  color: var(--color-text);
+  text-shadow: 0 0 5px var(--color-text-shadow);
+}
+
+.pagination button {
+  width: 40px;
+}

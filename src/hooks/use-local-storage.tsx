@@ -1,12 +1,16 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { SEARCH_VALUE } from '../consts';
+import { SEARCH_VALUE } from '@/consts';
 
 const useLocalStorage = (): [string, Dispatch<SetStateAction<string>>] => {
   const [value, setValue] = useState(() => {
-    return localStorage.getItem(SEARCH_VALUE) ?? '';
+    if (typeof window !== 'undefined')
+      return window.localStorage.getItem(SEARCH_VALUE) ?? '';
+    return '';
   });
 
-  useEffect(() => localStorage.setItem(SEARCH_VALUE, value), [value]);
+  useEffect(() => {
+    window.localStorage.setItem(SEARCH_VALUE, value);
+  }, [value]);
 
   return [value, setValue];
 };

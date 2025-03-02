@@ -1,4 +1,4 @@
-import './button.css';
+import styles from './button.module.css';
 import { ReactNode } from 'react';
 
 const Button = ({
@@ -11,7 +11,7 @@ const Button = ({
   isDisabled?: boolean;
 }): ReactNode => {
   return (
-    <button className="button" onClick={onClick} disabled={isDisabled}>
+    <button className={styles.button} onClick={onClick} disabled={isDisabled}>
       <span>{buttonText}</span>
     </button>
   );

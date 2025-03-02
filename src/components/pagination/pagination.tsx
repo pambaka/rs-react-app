@@ -1,11 +1,13 @@
-import './pagination.css';
+import styles from './pagination.module.css';
 import { ReactNode, useEffect, useState } from 'react';
-import Button from '../button';
+import Button from '@/components/button';
 import changeCurrentPageNumber from './change-current-page-number';
 import { PageAction } from '@/types';
 import { PARAMS } from '@/consts';
-import { useSearchParams } from 'react-router-dom';
 import getValidPageNumber from '@/utils/get-valid-page-number';
+import { useRouter } from 'next/router';
+import assertString from '@/utils/assert-string';
+import getSearchQuery from '@/utils/get-search-query';
 
 const Pagination = ({
   isNextDisabled,
@@ -14,30 +16,29 @@ const Pagination = ({
   isNextDisabled: boolean;
   isPrevDisabled: boolean;
 }): ReactNode => {
-  const [searchParams, setSearchParams] = useSearchParams({});
-  const [currentPageNumber, setCurrentPageNumber] = useState(() => {
-    const page = searchParams.get(PARAMS.page);
-    return getValidPageNumber(page);
-  });
+  const router = useRouter();
+  const page = assertString(router.query[PARAMS.page]);
+  const [currentPageNumber, setCurrentPageNumber] = useState(() =>
+    getValidPageNumber(page)
+  );
 
   const updatePageNumber = async (action: PageAction) => {
     const newPageNumber = changeCurrentPageNumber(currentPageNumber, action);
     if (newPageNumber === currentPageNumber) return;
 
-    const searchValue = searchParams.get(PARAMS.search) ?? '';
-    setSearchParams({
-      [PARAMS.search]: searchValue,
-      [PARAMS.page]: `${newPageNumber}`,
-    });
+    const search = assertString(router.query[PARAMS.search]);
+
+    router.push(
+      `${router.pathname}${getSearchQuery({ search, page: String(newPageNumber) })}`
+    );
   };
 
   useEffect(() => {
-    const page = searchParams.get(PARAMS.page);
     setCurrentPageNumber(getValidPageNumber(page));
-  }, [searchParams]);
+  }, [page]);
 
   return (
-    <div className="pagination">
+    <div className={styles.pagination}>
       <Button
         buttonText="<"
         onClick={(event) => {
