@@ -15,3 +15,14 @@ export interface SwResponse {
 }
 
 export type PageAction = 'increment' | 'decrement';
+
+export type SearchParam = string | string[] | undefined;
+
+export type Response = {
+  swResponse: SwResponse | null;
+  message: string | null;
+};
+export type CharResponse = {
+  character: Character | null;
+  message: string | null;
+};

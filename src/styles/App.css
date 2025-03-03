@@ -28,3 +28,10 @@
   align-items: flex-start;
   gap: 20px;
 }
+
+.message {
+  font-size: 1.2rem;
+  font-weight: normal;
+  color: var(--color-text);
+  text-align: center;
+}

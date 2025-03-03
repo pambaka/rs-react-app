@@ -1,10 +1,10 @@
-import './loader.css';
+import styles from './loader.module.css';
 import { ReactNode } from 'react';
 
 const Loader = (): ReactNode => {
   return (
-    <div className="loader-backdrop">
-      <div className="loader"></div>
+    <div className={styles['loader-backdrop']}>
+      <div className={styles.loader}></div>
     </div>
   );
 };

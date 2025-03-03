@@ -1,11 +1,10 @@
-import './flyout.css';
+import styles from './flyout.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReactNode } from 'react';
 import { StoreRootState } from '@/store/store';
 import { Character } from '@/types';
 import Button from '@/components/button';
 import { unselectAll } from '@/store/selected-cards-slice';
-import { Link } from 'react-router-dom';
 import getBlobParts from './get-blob-parts';
 
 const Flyout = (): ReactNode => {
@@ -25,7 +24,10 @@ const Flyout = (): ReactNode => {
 
   if (isFlyoutVisible)
     return (
-      <div className="flyout" onClick={(event) => event.stopPropagation()}>
+      <div
+        className={styles.flyout}
+        onClick={(event) => event.stopPropagation()}
+      >
         <div>
           <p>
             Selected&nbsp;cards: <span>{selectedCards.length}</span>
@@ -37,8 +39,8 @@ const Flyout = (): ReactNode => {
               dispatch(unselectAll());
             }}
           />
-          <Link
-            to={getUrl()}
+          <a
+            href={getUrl()}
             download={`${selectedCards.length}_characters.csv`}
           >
             <Button
@@ -47,11 +49,12 @@ const Flyout = (): ReactNode => {
                 event.stopPropagation();
               }}
             />
-          </Link>
+          </a>
         </div>
       </div>
     );
-  else return null;
+
+  return null;
 };
 
 export default Flyout;

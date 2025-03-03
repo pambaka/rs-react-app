@@ -30,7 +30,7 @@ const Card = ({ char }: { char: Character }): ReactNode => {
 
   const showDetails = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
-    router.push(`details/${charId}/${getSearchQuery({ ...router.query })}`);
+    router.push(`/details/${charId}/${getSearchQuery({ ...router.query })}`);
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {

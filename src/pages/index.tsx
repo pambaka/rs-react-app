@@ -1,31 +1,28 @@
 import { ReactNode } from 'react';
 import { GetServerSideProps } from 'next';
-import { SwResponse } from '@/types';
-import { URL } from '@/consts';
+import { Response } from '@/types';
 import { Provider } from 'react-redux';
 import store from '@/store/store';
 import MainPage from '@/components/pages/main-page';
 import assertString from '@/utils/assert-string';
-import getSearchQuery from '@/utils/get-search-query';
+import getCharacter from '@/api/get-characters';
+import { ResponseContext } from '@/context/response-context';
 
 export const getServerSideProps = (async (context) => {
   const search = assertString(context.query.search);
   const page = assertString(context.query.page);
 
-  let swResponse: SwResponse | null = null;
-  await fetch(`${URL.people}/${getSearchQuery({ search, page })}`)
-    .then((res) => {
-      if (res.ok) return res.json();
-      else return null;
-    })
-    .then((data: SwResponse | null) => (swResponse = data));
-  return { props: { swResponse } };
-}) satisfies GetServerSideProps<{ swResponse: SwResponse | null }>;
+  const response = await getCharacter(search, page);
 
-const Page = ({ swResponse }: { swResponse: SwResponse }): ReactNode => {
+  return { props: { response } };
+}) satisfies GetServerSideProps<{ response: Response }>;
+
+const Page = ({ response }: { response: Response }): ReactNode => {
   return (
     <Provider store={store}>
-      <MainPage swResponse={swResponse} />
+      <ResponseContext.Provider value={response}>
+        <MainPage />
+      </ResponseContext.Provider>
     </Provider>
   );
 };

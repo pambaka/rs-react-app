@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import getSearchQuery from '@/utils/get-search-query';
 import assertString from '@/utils/assert-string';
 import isValidPageNumber from '@/utils/is-valid-page-number';
+import getPath from '@/utils/get-path';
 
 const SearchSection = (): ReactNode => {
   const [searchValue, setSearchValue] = useLocalStorage();
@@ -17,19 +18,25 @@ const SearchSection = (): ReactNode => {
     const search = assertString(router.query.search);
     const page = assertString(router.query[PARAMS.page]);
 
+    const path = getPath(router.query.charid);
+    let searchParams: { search?: string; page?: string } = {};
+
     if (search || isValidPageNumber(page)) {
       setInputValue(search);
-      router.push(getSearchQuery({ search, page }));
+      searchParams = { search, page };
     } else if (searchValue) {
       setInputValue(searchValue);
-      router.push(getSearchQuery({ search: searchValue }));
-    } else if (!search && !searchValue)
-      router.push(getSearchQuery({ search: '' }));
+      searchParams = { search: searchValue };
+    } else if (!search && !searchValue) searchParams = { search: '' };
+
+    router.push(path + getSearchQuery(searchParams));
   }, []);
 
   const handleClick = async () => {
     setSearchValue(inputValue);
-    router.push(getSearchQuery({ search: inputValue }));
+    router.push(
+      getPath(router.query.charid) + getSearchQuery({ search: inputValue })
+    );
   };
 
   const handleChange = (event: ChangeEvent) => {
