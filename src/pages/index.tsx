@@ -7,6 +7,7 @@ import MainPage from '@/components/pages/main-page';
 import assertString from '@/utils/assert-string';
 import getCharacter from '@/api/get-characters';
 import { ResponseContext } from '@/context/response-context';
+import Head from 'next/head';
 
 export const getServerSideProps = (async (context) => {
   const search = assertString(context.query.search);
@@ -19,11 +20,16 @@ export const getServerSideProps = (async (context) => {
 
 const Page = ({ response }: { response: Response }): ReactNode => {
   return (
-    <Provider store={store}>
-      <ResponseContext.Provider value={response}>
-        <MainPage />
-      </ResponseContext.Provider>
-    </Provider>
+    <>
+      <Head>
+        <title>SW React app</title>
+      </Head>
+      <Provider store={store}>
+        <ResponseContext.Provider value={response}>
+          <MainPage />
+        </ResponseContext.Provider>
+      </Provider>
+    </>
   );
 };
 
