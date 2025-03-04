@@ -6,16 +6,21 @@ import react from 'eslint-plugin-react';
 import tseslint from 'typescript-eslint';
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 import reactCompiler from 'eslint-plugin-react-compiler';
+import { FlatCompat } from '@eslint/eslintrc';
 
-export default tseslint.config(
-  { ignores: ['dist'] },
+const compat = new FlatCompat({
+  baseDirectory: import.meta.dirname,
+});
+
+const config = [
+  ...compat.config({
+    extends: ['next/core-web-vitals', 'next/typescript'],
+  }),
+  js.configs.recommended,
+  ...tseslint.configs.strict,
+  eslintPluginPrettier,
   {
-    extends: [
-      js.configs.recommended,
-      ...tseslint.configs.strict,
-      eslintPluginPrettier,
-    ],
-    files: ['**/*.{ts,tsx}'],
+    files: ['*/.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
@@ -32,7 +37,6 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
-      'react-refresh/only-export-components': 'off',
       'react-compiler/react-compiler': 'error',
       ...react.configs.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
@@ -42,5 +46,8 @@ export default tseslint.config(
         version: 'detect',
       },
     },
-  }
-);
+  },
+  { ignores: ['dist', '.next/'] },
+];
+
+export default config;
