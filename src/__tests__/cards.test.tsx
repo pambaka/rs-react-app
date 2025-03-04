@@ -1,21 +1,29 @@
-import Card from '../components/cards/cards';
-import { describe, expect, it } from 'vitest';
+import Card from '@/components/cards/card';
+import { describe, expect, it, Mock, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
 import { getChar, mockChar, mockStore } from './mocks';
 import { Provider } from 'react-redux';
+import { useRouter } from 'next/router';
+
+vi.mock('next/router', () => ({
+  useRouter: vi.fn(),
+}));
 
 const id = 2;
 const testId = 'testId';
 
 describe('Card component', () => {
+  const mockRouter = {
+    query: {},
+    push: vi.fn(() => new Promise(() => {})),
+  };
+  (useRouter as Mock).mockReturnValue(mockRouter);
+
   render(
     <Provider store={mockStore}>
-      <BrowserRouter>
-        <div data-testid={testId}>
-          <Card people={[getChar(id)]} />
-        </div>
-      </BrowserRouter>
+      <div data-testid={testId}>
+        <Card char={getChar(id)} />
+      </div>
     </Provider>
   );
 
@@ -31,7 +39,7 @@ describe('Card component', () => {
 
     if (card instanceof HTMLDivElement) {
       fireEvent.click(card);
-      expect(location.pathname).toBe(`/details/${id}/`);
+      expect(mockRouter.push).toBeCalledWith(`/details/${id}?page=1`);
     }
   });
 });

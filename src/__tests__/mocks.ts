@@ -1,6 +1,6 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { URL } from '../consts';
-import { Character } from '../types';
+import { Character, SwResponse } from '../types';
 
 export const mockChar: Character = {
   name: 'someName',
@@ -36,3 +36,9 @@ export const mockStore = configureStore({
     selectedCards: selectedCardsSlice.reducer,
   },
 });
+
+export const mockEmptySwResponse: SwResponse = {
+  next: null,
+  previous: null,
+  results: [],
+};

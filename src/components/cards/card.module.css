@@ -19,6 +19,11 @@
   font-size: 1.2rem;
   font-weight: 500;
   color: var(--color-text);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card__description {

@@ -8,7 +8,6 @@ const getCharacter = async (charId: string): Promise<CharResponse> => {
   if (charId)
     await fetch(`${URL.people}/${charId}`)
       .then((res) => {
-        console.log(res.status, typeof res.status);
         if (res.ok) return res.json();
 
         if (res.status === 404) message = MESSAGES.notFound;

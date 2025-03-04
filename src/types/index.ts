@@ -10,8 +10,8 @@ export interface Character {
 
 export interface SwResponse {
   results: Character[];
-  next: 'string' | null;
-  previous: 'string' | null;
+  next: string | null;
+  previous: string | null;
 }
 
 export type PageAction = 'increment' | 'decrement';
