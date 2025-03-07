@@ -7,8 +7,9 @@ import { MESSAGES } from '@/consts';
 import { Provider } from 'react-redux';
 import { useContext } from 'react';
 
-vi.mock('next/router', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
+  useSearchParams: vi.fn(),
 }));
 
 vi.mock('react', async (importOriginal) => {

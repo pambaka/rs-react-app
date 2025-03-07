@@ -1,29 +1,22 @@
 import Card from '@/components/card/';
 import { describe, expect, it, Mock, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import store from '@/store/store';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
-vi.mock('next/router', () => ({
+const searchQuery = 'searchQuery';
+
+vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
+  useSearchParams: () => ({ toString: () => searchQuery }),
 }));
-
-const search = ':)';
-const page = '2';
 
 describe('Detailed card component', () => {
   const mockRouter = {
-    query: { search, page, charid: 1 },
-    push: vi.fn(() => new Promise(() => {})),
+    push: vi.fn(),
   };
   (useRouter as Mock).mockReturnValue(mockRouter);
 
-  render(
-    <Provider store={store}>
-      <Card />
-    </Provider>
-  );
+  render(<Card />);
 
   it('Renders detailed card component', () => {
     const card = screen.getByTestId('detailedCard');
@@ -34,6 +27,6 @@ describe('Detailed card component', () => {
     const closeButton = screen.getByRole('button');
     expect(closeButton).toBeInstanceOf(HTMLButtonElement);
     fireEvent.click(closeButton);
-    expect(mockRouter.push).toBeCalledWith(`/?search=${search}&page=${page}`);
+    expect(mockRouter.push).toBeCalledWith(`/?${searchQuery}`);
   });
 });

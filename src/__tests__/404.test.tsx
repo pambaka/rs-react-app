@@ -1,4 +1,4 @@
-import Page from '@/pages/404';
+import Page from '@/app/[not-found]/page';
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 

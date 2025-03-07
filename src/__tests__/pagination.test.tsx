@@ -2,11 +2,19 @@ import { describe, expect, it, Mock, vi } from 'vitest';
 import Pagination from '@/components/pagination';
 import { PARAMS } from '@/consts';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Response } from '@/types';
 
-vi.mock('next/router', () => ({
+const page = '5';
+
+vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
+  usePathname: () => '',
+  useSearchParams: () => ({
+    get: (param: string) => {
+      if (param === PARAMS.page) return page;
+    },
+  }),
 }));
 
 vi.mock('react', async (importOriginal) => {
@@ -25,10 +33,8 @@ vi.mock('react', async (importOriginal) => {
 });
 
 describe('Pagination component', () => {
-  const page: string = '5';
   const mockRouter = {
-    query: { [PARAMS.search]: '', [PARAMS.page]: page },
-    push: vi.fn(() => new Promise(() => {})),
+    push: vi.fn(),
   };
   (useRouter as Mock).mockReturnValue(mockRouter);
 

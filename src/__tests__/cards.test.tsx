@@ -3,10 +3,13 @@ import { describe, expect, it, Mock, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { getChar, mockChar, mockStore } from './mocks';
 import { Provider } from 'react-redux';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
-vi.mock('next/router', () => ({
+const searchQuery = 'search=a';
+
+vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
+  useSearchParams: () => ({ toString: () => searchQuery }),
 }));
 
 const id = 2;
@@ -39,7 +42,7 @@ describe('Card component', () => {
 
     if (card instanceof HTMLDivElement) {
       fireEvent.click(card);
-      expect(mockRouter.push).toBeCalledWith(`/details/${id}?page=1`);
+      expect(mockRouter.push).toBeCalledWith(`/details/${id}?${searchQuery}`);
     }
   });
 });

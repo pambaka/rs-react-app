@@ -8,11 +8,10 @@ const inputValue = 'testValue';
 const getItemSpy = vi.spyOn(Storage.prototype, 'getItem');
 const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
 
-vi.mock('next/router', () => ({
-  useRouter: () => ({
-    query: {},
-    push: vi.fn(),
-  }),
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: vi.fn() }),
+  useSearchParams: () => ({ get: vi.fn() }),
+  usePathname: vi.fn(),
 }));
 
 describe('Search section component', () => {

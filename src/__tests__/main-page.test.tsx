@@ -1,24 +1,22 @@
 import MainPage from '@/components/pages/main-page';
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import store from '@/store/store';
+import StoreProvider from '@/providers/store-provider';
 
-vi.mock('next/router', () => ({
+vi.mock('next/navigation', () => ({
   useRouter: () => ({
-    pathname: '',
-    query: {},
     push: vi.fn(),
-    events: { on: vi.fn(), off: vi.fn() },
   }),
+  usePathname: () => '',
+  useSearchParams: () => ({ get: vi.fn() }),
 }));
 
 describe('Main page component', () => {
   it('Render test', () => {
     render(
-      <Provider store={store}>
+      <StoreProvider>
         <MainPage />
-      </Provider>
+      </StoreProvider>
     );
 
     const buttons = screen.getAllByRole('button');

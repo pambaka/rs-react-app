@@ -1,14 +1,17 @@
-import Page from '@/pages/details/[charid]';
-import { CharResponse, Response } from '@/types';
+import Page from '@/app/details/[charid]/page';
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
-import { mockChar, mockEmptySwResponse } from './mocks';
+import { describe, expect, it, Mock, vi } from 'vitest';
 
-global.fetch = vi.fn();
+global.fetch = vi.fn(() =>
+  Promise.resolve({
+    ok: true,
+    json: () => Promise.resolve(),
+  })
+) as Mock;
 
 vi.mock('next/router', () => ({
   useRouter: () => ({
-    pathname: 'details',
+    pathname: '',
   }),
 }));
 
@@ -23,14 +26,15 @@ vi.mock('@/components/card', () => ({
 }));
 
 describe('Next.js Pages router details page', () => {
-  it('Renders char details if the path is "/details"', () => {
-    const response: Response = {
-      swResponse: mockEmptySwResponse,
-      message: null,
-    };
-    const charResponse: CharResponse = { character: mockChar, message: null };
+  it('Renders char details if there is a charId', async () => {
+    const charid = '1';
 
-    render(<Page response={response} charResponse={charResponse} />);
+    render(
+      await Page({
+        params: Promise.resolve({ charid }),
+        searchParams: Promise.resolve({}),
+      })
+    );
 
     const cardTitle = screen.getByText(cardText);
     expect(cardTitle).toBeInstanceOf(HTMLHeadingElement);
