@@ -1,3 +1,5 @@
+'use client';
+
 import styles from './pagination.module.css';
 import { ReactNode, useContext, useEffect, useState } from 'react';
 import Button from '@/components/button';
@@ -5,16 +7,16 @@ import changeCurrentPageNumber from './change-current-page-number';
 import { PageAction } from '@/types';
 import { PARAMS } from '@/consts';
 import getValidPageNumber from '@/utils/get-valid-page-number';
-import { useRouter } from 'next/router';
-import assertString from '@/utils/assert-string';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import getSearchQuery from '@/utils/get-search-query';
-import getPath from '@/utils/get-path';
-import { ResponseContext } from '@/context/response-context';
+import ResponseContext from '@/context/response-context';
 import isPageButtonDisabled from './is-page-button-disabled';
 
 const Pagination = (): ReactNode => {
   const router = useRouter();
-  const page = assertString(router.query[PARAMS.page]);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const page = searchParams.get(PARAMS.page);
   const [currentPageNumber, setCurrentPageNumber] = useState(() =>
     getValidPageNumber(page)
   );
@@ -31,11 +33,10 @@ const Pagination = (): ReactNode => {
     const newPageNumber = changeCurrentPageNumber(currentPageNumber, action);
     if (newPageNumber === currentPageNumber) return;
 
-    const search = assertString(router.query[PARAMS.search]);
+    const search = searchParams.get(PARAMS.search) ?? '';
 
     router.push(
-      getPath(router.query.charid) +
-        getSearchQuery({ search, page: String(newPageNumber) })
+      pathname + getSearchQuery({ search, page: String(newPageNumber) })
     );
   };
 

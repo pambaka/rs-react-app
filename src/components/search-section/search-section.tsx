@@ -1,42 +1,42 @@
+'use client';
+
 import styles from './search-section.module.css';
 import { ChangeEvent, ReactNode, useEffect, useState } from 'react';
 import Button from '../button';
 import useLocalStorage from '@/hooks/use-local-storage';
 import { PARAMS } from '@/consts';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import getSearchQuery from '@/utils/get-search-query';
-import assertString from '@/utils/assert-string';
 import isValidPageNumber from '@/utils/is-valid-page-number';
-import getPath from '@/utils/get-path';
+import { SearchParam } from '@/types';
 
 const SearchSection = (): ReactNode => {
   const [searchValue, setSearchValue] = useLocalStorage();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
-    const search = assertString(router.query.search);
-    const page = assertString(router.query[PARAMS.page]);
+    const search = searchParams.get(PARAMS.search) ?? '';
+    const page = searchParams.get(PARAMS.page) ?? '';
 
-    const path = getPath(router.query.charid);
-    let searchParams: { search?: string; page?: string } = {};
+    let queryParams: { search?: SearchParam; page?: SearchParam } = {};
 
     if (search || isValidPageNumber(page)) {
       setInputValue(search);
-      searchParams = { search, page };
+      queryParams = { search, page };
     } else if (searchValue) {
       setInputValue(searchValue);
-      searchParams = { search: searchValue };
-    } else if (!search && !searchValue) searchParams = { search: '' };
+      queryParams = { search: searchValue };
+    } else if (!search && !searchValue) queryParams = { search: '' };
 
-    router.push(path + getSearchQuery(searchParams));
+    router.push(pathname + getSearchQuery(queryParams));
   }, []);
 
   const handleClick = async () => {
     setSearchValue(inputValue);
-    router.push(
-      getPath(router.query.charid) + getSearchQuery({ search: inputValue })
-    );
+    router.push(pathname + getSearchQuery({ search: inputValue }));
   };
 
   const handleChange = (event: ChangeEvent) => {

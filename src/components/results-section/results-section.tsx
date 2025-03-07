@@ -3,7 +3,7 @@ import { Cards } from '@/components/cards';
 import { Character } from '@/types';
 import { ReactNode, useContext } from 'react';
 import { MESSAGES } from '@/consts';
-import { ResponseContext } from '@/context/response-context';
+import ResponseContext from '@/context/response-context';
 
 const ResultsSection = (): ReactNode => {
   const { swResponse, message } = useContext(ResponseContext);

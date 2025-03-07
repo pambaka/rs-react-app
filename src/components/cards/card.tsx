@@ -1,3 +1,5 @@
+'use client';
+
 import styles from './card.module.css';
 import { ReactNode, useEffect, useState } from 'react';
 import { Character } from '@/types';
@@ -10,8 +12,7 @@ import {
 import { HeartIcon } from '@/components/icons';
 import { StoreRootState } from '@/store/store';
 import isCardSelected from './is-card-selected';
-import { useRouter } from 'next/router';
-import getSearchQuery from '@/utils/get-search-query';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const Card = ({ char }: { char: Character }): ReactNode => {
   const charId = getCharId(char.url);
@@ -22,6 +23,7 @@ const Card = ({ char }: { char: Character }): ReactNode => {
     isCardSelected(selectedCards, charId)
   );
   const router = useRouter();
+  const searchParams = useSearchParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -30,7 +32,7 @@ const Card = ({ char }: { char: Character }): ReactNode => {
 
   const showDetails = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
-    router.push(`/details/${charId}${getSearchQuery({ ...router.query })}`);
+    router.push(`/details/${charId}?${searchParams.toString()}`);
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {

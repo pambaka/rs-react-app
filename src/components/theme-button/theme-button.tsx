@@ -1,3 +1,5 @@
+'use client';
+
 import styles from './theme-button.module.css';
 import ThemeContext from '@/context/theme-context';
 import { ReactNode, useContext } from 'react';
@@ -8,7 +10,11 @@ const ThemeButton = (): ReactNode => {
 
   return (
     <div
-      className={styles['theme-button']}
+      className={
+        isLightThemeSet
+          ? styles['theme-button']
+          : `${styles['theme-button']} dark-theme`
+      }
       onClick={(event) => {
         event.stopPropagation();
       }}

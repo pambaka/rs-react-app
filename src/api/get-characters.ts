@@ -1,10 +1,10 @@
 import { MESSAGES, URL } from '@/consts';
-import { Response, SwResponse } from '@/types';
+import { Response, SearchParam, SwResponse } from '@/types';
 import getSearchQuery from '@/utils/get-search-query';
 
 const getCharacters = async (
-  search: string | undefined,
-  page: string | undefined
+  search: SearchParam,
+  page: SearchParam
 ): Promise<Response> => {
   let swResponse: SwResponse | null = null;
   let message: string | null = null;

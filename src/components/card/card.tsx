@@ -1,14 +1,16 @@
+'use client';
+
 import styles from './card.module.css';
 import { ReactNode } from 'react';
 import CardDetails from '@/components/card-details';
-import { useRouter } from 'next/router';
-import getSearchQuery from '@/utils/get-search-query';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const Card = (): ReactNode => {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const closeCard = () => {
-    router.push(`/${getSearchQuery({ ...router.query })}`);
+    router.push(`/?${searchParams.toString()}`);
   };
 
   return (

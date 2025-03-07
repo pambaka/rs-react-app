@@ -1,6 +1,5 @@
+import { SearchParam } from '@/types';
 import assertString from './assert-string';
-
-type SearchParam = string | string[] | undefined;
 
 const getSearchQuery = (query: {
   search?: SearchParam;
