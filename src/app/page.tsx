@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import MainPage from '@/components/pages/main-page';
 import getCharacters from '@/api/get-characters';
-import Head from 'next/head';
 import { SearchParam } from '@/types';
 import ResponseProvider from '@/providers/response-provider';
 
@@ -15,9 +14,6 @@ const Page = async ({
 
   return (
     <>
-      <Head>
-        <title>SW React app</title>
-      </Head>
       <ResponseProvider response={response}>
         <MainPage />
       </ResponseProvider>

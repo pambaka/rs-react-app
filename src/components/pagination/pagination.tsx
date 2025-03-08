@@ -11,6 +11,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import getSearchQuery from '@/utils/get-search-query';
 import ResponseContext from '@/context/response-context';
 import isPageButtonDisabled from './is-page-button-disabled';
+import { LoaderContext } from '@/providers/loader-provider';
 
 const Pagination = (): ReactNode => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const Pagination = (): ReactNode => {
   const [isNextDisabled, setIsNextDisabled] = useState(false);
   const [isPrevDisabled, setIsPrevDisabled] = useState(false);
   const { swResponse } = useContext(ResponseContext);
+  const { changeIsLoading } = useContext(LoaderContext);
 
   useEffect(() => {
     setIsNextDisabled(isPageButtonDisabled(swResponse?.next));
@@ -32,6 +34,8 @@ const Pagination = (): ReactNode => {
   const updatePageNumber = async (action: PageAction) => {
     const newPageNumber = changeCurrentPageNumber(currentPageNumber, action);
     if (newPageNumber === currentPageNumber) return;
+
+    changeIsLoading(true);
 
     const search = searchParams.get(PARAMS.search) ?? '';
 

@@ -3,7 +3,6 @@ import Pagination from '@/components/pagination';
 import { PARAMS } from '@/consts';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
-import { Response } from '@/types';
 
 const page = '5';
 
@@ -21,13 +20,14 @@ vi.mock('react', async (importOriginal) => {
   const actual: object = await importOriginal();
   return {
     ...actual,
-    useContext: (): Response => ({
+    useContext: () => ({
       swResponse: {
         previous: 'previous page',
         next: 'next page',
         results: [],
       },
       message: null,
+      changeIsLoading: vi.fn(),
     }),
   };
 });

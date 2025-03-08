@@ -15,6 +15,12 @@ const compat = new FlatCompat({
 const config = [
   ...compat.config({
     extends: ['next/core-web-vitals', 'next/typescript'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_' },
+      ],
+    },
   }),
   js.configs.recommended,
   ...tseslint.configs.strict,

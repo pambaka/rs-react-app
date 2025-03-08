@@ -1,20 +1,14 @@
 'use client';
 
 import styles from './main-page.module.css';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useContext, useEffect, useState } from 'react';
 import SearchSection from '@/components/search-section';
 import ResultsSection from '@/components/results-section';
 import Pagination from '@/components/pagination';
-// import Loader from '@/components/loader';
 import Flyout from '@/components/flyout';
 import ThemeButton from '@/components/theme-button';
-import {
-  // useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from 'next/navigation';
-// import useLoader from '@/hooks/use-loader';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { LoaderContext } from '@/providers/loader-provider';
 
 const MainPage = (): ReactNode => {
   const router = useRouter();
@@ -23,7 +17,7 @@ const MainPage = (): ReactNode => {
   const [isOutletOpen, setIsOutletOpen] = useState(
     pathname.includes('details')
   );
-  // const [isLoading] = useLoader();
+  const { changeIsLoading } = useContext(LoaderContext);
 
   useEffect(() => {
     if (pathname.includes('details')) setIsOutletOpen(true);
@@ -31,6 +25,7 @@ const MainPage = (): ReactNode => {
   }, [pathname]);
 
   const closeOutlet = (): void => {
+    changeIsLoading(true);
     router.push(`/?${searchParams.toString()}`);
   };
 
@@ -48,7 +43,6 @@ const MainPage = (): ReactNode => {
       <ResultsSection />
       <Pagination />
       <Flyout />
-      {/* {isLoading && <Loader />} */}
     </section>
   );
 };

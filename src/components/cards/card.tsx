@@ -1,7 +1,7 @@
 'use client';
 
 import styles from './card.module.css';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useContext, useEffect, useState } from 'react';
 import { Character } from '@/types';
 import getCharId from '@/utils/get-character-id';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ import { HeartIcon } from '@/components/icons';
 import { StoreRootState } from '@/store/store';
 import isCardSelected from './is-card-selected';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { LoaderContext } from '@/providers/loader-provider';
 
 const Card = ({ char }: { char: Character }): ReactNode => {
   const charId = getCharId(char.url);
@@ -24,6 +25,7 @@ const Card = ({ char }: { char: Character }): ReactNode => {
   );
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { changeIsLoading } = useContext(LoaderContext);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -32,6 +34,7 @@ const Card = ({ char }: { char: Character }): ReactNode => {
 
   const showDetails = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
+    changeIsLoading(true);
     router.push(`/details/${charId}?${searchParams.toString()}`);
   };
 

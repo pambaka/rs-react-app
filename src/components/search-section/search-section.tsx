@@ -1,7 +1,7 @@
 'use client';
 
 import styles from './search-section.module.css';
-import { ChangeEvent, ReactNode, useEffect, useState } from 'react';
+import { ChangeEvent, ReactNode, useContext, useEffect, useState } from 'react';
 import Button from '../button';
 import useLocalStorage from '@/hooks/use-local-storage';
 import { PARAMS } from '@/consts';
@@ -9,6 +9,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import getSearchQuery from '@/utils/get-search-query';
 import isValidPageNumber from '@/utils/is-valid-page-number';
 import { SearchParam } from '@/types';
+import { LoaderContext } from '@/providers/loader-provider';
 
 const SearchSection = (): ReactNode => {
   const [searchValue, setSearchValue] = useLocalStorage();
@@ -16,6 +17,7 @@ const SearchSection = (): ReactNode => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [inputValue, setInputValue] = useState('');
+  const { changeIsLoading } = useContext(LoaderContext);
 
   useEffect(() => {
     const search = searchParams.get(PARAMS.search) ?? '';
@@ -35,6 +37,7 @@ const SearchSection = (): ReactNode => {
   }, []);
 
   const handleClick = async () => {
+    changeIsLoading(true);
     setSearchValue(inputValue);
     router.push(pathname + getSearchQuery({ search: inputValue }));
   };
