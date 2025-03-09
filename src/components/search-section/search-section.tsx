@@ -33,9 +33,10 @@ const SearchSection = (): ReactNode => {
   }, []);
 
   const handleClick = async () => {
-    setSearchValue(inputValue);
+    const trimValue = inputValue.trim();
+    setSearchValue(trimValue);
     router.push(
-      getPath(router.query.charid) + getSearchQuery({ search: inputValue })
+      getPath(router.query.charid) + getSearchQuery({ search: trimValue })
     );
   };
 
