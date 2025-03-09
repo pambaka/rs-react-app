@@ -1,9 +1,9 @@
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
-
-import type { Route } from './+types/root';
-import ThemeProvider from './providers/theme-provider';
 import '@/styles/index.css';
 import '@/styles/App.css';
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
+import type { Route } from './+types/root';
+import ThemeProvider from './providers/theme-provider';
+import FallbackUi from './components/fallback-ui';
 
 export const links: Route.LinksFunction = () => [
   { rel: 'icon', type: 'image/svg+xml', href: '/sun.svg' },
@@ -43,4 +43,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return <Outlet />;
+}
+
+export function ErrorBoundary() {
+  return <FallbackUi />;
 }
