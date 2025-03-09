@@ -1,24 +1,43 @@
-import './search-section.css';
-import { ChangeEvent, ReactNode, useState } from 'react';
-import Button from '../button/button';
-import useLocalStorage from '../../hooks/use-local-storage';
-import { useSearchParams } from 'react-router-dom';
-import { PARAMS } from '../../consts';
-import isValidPageNumber from '../../utils/is-valid-page-number';
+import styles from './search-section.module.css';
+import { ChangeEvent, ReactNode, useEffect, useState } from 'react';
+import Button from '../button';
+import useLocalStorage from '@/hooks/use-local-storage';
+import { PARAMS } from '@/consts';
+import { useRouter } from 'next/router';
+import getSearchQuery from '@/utils/get-search-query';
+import assertString from '@/utils/assert-string';
+import isValidPageNumber from '@/utils/is-valid-page-number';
+import getPath from '@/utils/get-path';
 
-function SearchSection(): ReactNode {
+const SearchSection = (): ReactNode => {
   const [searchValue, setSearchValue] = useLocalStorage();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [inputValue, setInputValue] = useState(() => {
-    const search = searchParams.get(PARAMS.search);
-    const page = searchParams.get(PARAMS.page);
-    if (!search && !isValidPageNumber(page)) return searchValue;
-    return search ?? '';
-  });
+  const router = useRouter();
+  const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {
+    const search = assertString(router.query.search);
+    const page = assertString(router.query[PARAMS.page]);
+
+    const path = getPath(router.query.charid);
+    let searchParams: { search?: string; page?: string } = {};
+
+    if (search || isValidPageNumber(page)) {
+      setInputValue(search);
+      searchParams = { search, page };
+    } else if (searchValue) {
+      setInputValue(searchValue);
+      searchParams = { search: searchValue };
+    } else if (!search && !searchValue) searchParams = { search: '' };
+
+    router.push(path + getSearchQuery(searchParams));
+  }, []);
 
   const handleClick = async () => {
-    setSearchValue(inputValue);
-    setSearchParams({ search: inputValue });
+    const trimValue = inputValue.trim();
+    setSearchValue(trimValue);
+    router.push(
+      getPath(router.query.charid) + getSearchQuery({ search: trimValue })
+    );
   };
 
   const handleChange = (event: ChangeEvent) => {
@@ -28,9 +47,9 @@ function SearchSection(): ReactNode {
 
   return (
     <>
-      <section className="search-section">
+      <section className={styles['search-section']}>
         <input
-          className="search-input"
+          className={styles['search-input']}
           type="text"
           value={inputValue}
           onChange={handleChange}
@@ -40,7 +59,7 @@ function SearchSection(): ReactNode {
         ></input>
         <Button
           buttonText={'Search'}
-          callback={(event) => {
+          onClick={(event) => {
             event.stopPropagation();
             handleClick();
           }}
@@ -48,6 +67,6 @@ function SearchSection(): ReactNode {
       </section>
     </>
   );
-}
+};
 
 export default SearchSection;

@@ -1,55 +1,29 @@
-import './card.css';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react';
-import { Character } from '../../types';
-import Loader from '../loader/loader';
-import CardDetails from '../card-details/card-details';
-import api from '../../api/api';
-import { MESSAGES } from '../../consts';
+import styles from './card.module.css';
+import { ReactNode } from 'react';
+import CardDetails from '@/components/card-details';
+import { useRouter } from 'next/router';
+import getSearchQuery from '@/utils/get-search-query';
 
-function Card(): ReactNode {
-  const { charId } = useParams();
-  const [charData, setCharData]: [
-    Character | undefined,
-    Dispatch<SetStateAction<Character | undefined>>,
-  ] = useState();
-  const [message, setMessage] = useState('');
-  const { data, error, isFetching } = api.useGetCharacterQuery(charId);
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+const Card = (): ReactNode => {
+  const router = useRouter();
 
-  useEffect(() => {
-    if (data) setCharData(data);
-
-    if (error && 'status' in error && error.status === 404)
-      setMessage(MESSAGES.charNotFound);
-    else if (error) setMessage(MESSAGES.somethingWrong);
-  }, [data, error]);
-
-  function closeCard() {
-    navigate(`/?${searchParams.toString()}`);
-  }
+  const closeCard = () => {
+    router.push(`/${getSearchQuery({ ...router.query })}`);
+  };
 
   return (
     <>
-      <div className="card-detailed" data-testid="detailedCard">
-        <CardDetails char={charData} message={message} />
+      <div className={styles['card-detailed']} data-testid="detailedCard">
+        <CardDetails />
         <button
-          className="close-button"
+          className={styles['close-button']}
           aria-label="Close card button"
           title="close"
           onClick={closeCard}
         ></button>
-        <Loader isLoading={isFetching}></Loader>
       </div>
     </>
   );
-}
+};
 
 export default Card;

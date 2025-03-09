@@ -1,11 +1,23 @@
-import ResultsSection from '../components/results-section/results-section';
-import { MemoryRouter } from 'react-router-dom';
-import { Character } from '../types';
+import ResultsSection from '@/components/results-section';
+import { Character } from '@/types';
 import { cleanup, render, screen } from '@testing-library/react';
-import { beforeEach, describe, expect, it } from 'vitest';
-import { getChar, mockStore } from './mocks';
-import { MESSAGES } from '../consts';
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { getChar, mockEmptySwResponse, mockStore } from './mocks';
+import { MESSAGES } from '@/consts';
 import { Provider } from 'react-redux';
+import { useContext } from 'react';
+
+vi.mock('next/router', () => ({
+  useRouter: vi.fn(),
+}));
+
+vi.mock('react', async (importOriginal) => {
+  const actual: object = await importOriginal();
+  return {
+    ...actual,
+    useContext: vi.fn(),
+  };
+});
 
 describe('Results section component', () => {
   beforeEach(() => {
@@ -13,8 +25,13 @@ describe('Results section component', () => {
   });
 
   it('An appropriate message is displayed if no cards are present', () => {
-    const results: Character[] = [];
-    render(<ResultsSection results={results}></ResultsSection>);
+    const mockResponseContext = {
+      swResponse: mockEmptySwResponse,
+      message: null,
+    };
+    (useContext as Mock).mockReturnValue(mockResponseContext);
+
+    render(<ResultsSection />);
 
     const message = screen.getByText(MESSAGES.notFound);
     expect(message).toBeInstanceOf(HTMLDivElement);
@@ -28,11 +45,15 @@ describe('Results section component', () => {
       results.push(getChar(i));
     }
 
+    const mockResponseContext = {
+      swResponse: { next: null, previous: null, results },
+      message: null,
+    };
+    (useContext as Mock).mockReturnValue(mockResponseContext);
+
     render(
       <Provider store={mockStore}>
-        <MemoryRouter>
-          <ResultsSection results={results} />
-        </MemoryRouter>
+        <ResultsSection />
       </Provider>
     );
 

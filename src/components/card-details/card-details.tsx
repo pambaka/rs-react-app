@@ -1,14 +1,10 @@
-import { ReactNode } from 'react';
-import { Character } from '../../types';
-import { MESSAGES } from '../../consts';
+import styles from '../cards/card.module.css';
+import { ReactNode, useContext } from 'react';
+import { MESSAGES } from '@/consts';
+import { CharResponseContext } from '@/context/char-response-context';
 
-function CardDetails({
-  char,
-  message,
-}: {
-  char: Character | undefined;
-  message?: string;
-}): ReactNode {
+const CardDetails = (): ReactNode => {
+  const { character: char, message } = useContext(CharResponseContext);
   if (!char && message) return <div className="message">{message}</div>;
 
   if (!char) return;
@@ -17,8 +13,8 @@ function CardDetails({
 
   return (
     <>
-      <h2 className="card__title">{char.name}</h2>
-      <div className="card__description">
+      <h2 className={styles['card__title']}>{char.name}</h2>
+      <div className={styles['card__description']}>
         <p>
           height: <span>{char.height}</span>
         </p>
@@ -37,6 +33,6 @@ function CardDetails({
       </div>
     </>
   );
-}
+};
 
 export default CardDetails;

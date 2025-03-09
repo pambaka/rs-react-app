@@ -1,17 +1,23 @@
-import MainPage from '../components/pages/main-page/main-page';
-import { describe, expect, it } from 'vitest';
+import MainPage from '@/components/pages/main-page';
+import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from '../store/store';
+import store from '@/store/store';
+
+vi.mock('next/router', () => ({
+  useRouter: () => ({
+    pathname: '',
+    query: {},
+    push: vi.fn(),
+    events: { on: vi.fn(), off: vi.fn() },
+  }),
+}));
 
 describe('Main page component', () => {
   it('Render test', () => {
     render(
       <Provider store={store}>
-        <MemoryRouter>
-          <MainPage />
-        </MemoryRouter>
+        <MainPage />
       </Provider>
     );
 

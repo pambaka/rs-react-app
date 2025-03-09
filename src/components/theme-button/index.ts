@@ -1,3 +1,1 @@
-import ThemeButton from './theme-button';
-
-export default ThemeButton;
+export { default } from './theme-button';

@@ -1,5 +1,5 @@
-import { Character } from '../../types';
-import getCharId from '../../utils/get-character-id';
+import { Character } from '@/types';
+import getCharId from '@/utils/get-character-id';
 
 const isCardSelected = (
   selectedCards: Character[],

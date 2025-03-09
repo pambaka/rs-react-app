@@ -1,4 +1,4 @@
-import ThemeButton from '../components/theme-button/theme-button';
+import ThemeButton from '@/components/theme-button';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 

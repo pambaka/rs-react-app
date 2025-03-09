@@ -1,28 +1,23 @@
-import Card from '../components/card/card';
-import { describe, expect, it, vi } from 'vitest';
+import Card from '@/components/card/';
+import { describe, expect, it, Mock, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import store from '../store/store';
+import { useRouter } from 'next/router';
 
-const navigate = vi.fn();
+vi.mock('next/router', () => ({
+  useRouter: vi.fn(),
+}));
 
-vi.mock('react-router-dom', async (importOriginal) => {
-  const actual: object = await importOriginal();
-  return {
-    ...actual,
-    useNavigate: () => navigate,
-  };
-});
+const search = ':)';
+const page = '2';
 
 describe('Detailed card component', () => {
-  render(
-    <Provider store={store}>
-      <BrowserRouter>
-        <Card />
-      </BrowserRouter>
-    </Provider>
-  );
+  const mockRouter = {
+    query: { search, page, charid: 1 },
+    push: vi.fn(() => new Promise(() => {})),
+  };
+  (useRouter as Mock).mockReturnValue(mockRouter);
+
+  render(<Card />);
 
   it('Renders detailed card component', () => {
     const card = screen.getByTestId('detailedCard');
@@ -33,6 +28,6 @@ describe('Detailed card component', () => {
     const closeButton = screen.getByRole('button');
     expect(closeButton).toBeInstanceOf(HTMLButtonElement);
     fireEvent.click(closeButton);
-    expect(navigate).toBeCalledWith('/?');
+    expect(mockRouter.push).toBeCalledWith(`/?search=${search}&page=${page}`);
   });
 });

@@ -24,10 +24,3 @@
 .results-section:has(.message) {
   display: flex;
 }
-
-.message {
-  font-size: 1.2rem;
-  font-weight: normal;
-  color: var(--color-text);
-  text-align: center;
-}

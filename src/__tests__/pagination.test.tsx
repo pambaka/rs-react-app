@@ -1,31 +1,46 @@
-import { describe, expect, it } from 'vitest';
-import Pagination from '../components/pagination/pagination';
-import { PARAMS } from '../consts';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, expect, it, Mock, vi } from 'vitest';
+import Pagination from '@/components/pagination';
+import { PARAMS } from '@/consts';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { useRouter } from 'next/router';
+import { Response } from '@/types';
+
+vi.mock('next/router', () => ({
+  useRouter: vi.fn(),
+}));
+
+vi.mock('react', async (importOriginal) => {
+  const actual: object = await importOriginal();
+  return {
+    ...actual,
+    useContext: (): Response => ({
+      swResponse: {
+        previous: 'previous page',
+        next: 'next page',
+        results: [],
+      },
+      message: null,
+    }),
+  };
+});
 
 describe('Pagination component', () => {
-  it('The component updates URL query parameter when page changes', async () => {
-    render(
-      <BrowserRouter>
-        <Pagination isNextDisabled={false} isPrevDisabled={false} />
-      </BrowserRouter>
-    );
+  const page: string = '5';
+  const mockRouter = {
+    query: { [PARAMS.search]: '', [PARAMS.page]: page },
+    push: vi.fn(() => new Promise(() => {})),
+  };
+  (useRouter as Mock).mockReturnValue(mockRouter);
 
-    const nextButton = await screen.findByRole('button', { name: '>' });
+  it('The component updates URL query parameter when page changes', async () => {
+    render(<Pagination />);
+
+    const nextButton = screen.getByRole('button', { name: '>' });
     fireEvent.click(nextButton);
-    await waitFor(() =>
-      expect(new URLSearchParams(location.search).get(PARAMS.page)).toBe('2')
-    );
-    fireEvent.click(nextButton);
-    await waitFor(() =>
-      expect(new URLSearchParams(location.search).get(PARAMS.page)).toBe('3')
-    );
+    expect(mockRouter.push).toBeCalledWith(`?page=${+page + 1}`);
 
     const prevButton = screen.getByRole('button', { name: '<' });
     fireEvent.click(prevButton);
-    await waitFor(() =>
-      expect(new URLSearchParams(location.search).get(PARAMS.page)).toBe('2')
-    );
+    expect(mockRouter.push).toBeCalledWith(`?page=${+page - 1}`);
   });
 });

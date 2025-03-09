@@ -7,7 +7,7 @@
   background-color: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(2px);
   z-index: 1;
-  display: none;
+  display: grid;
   place-content: center;
 }
 
@@ -49,8 +49,4 @@
     height: 50px;
     opacity: 0.2;
   }
-}
-
-.visible {
-  display: grid;
 }

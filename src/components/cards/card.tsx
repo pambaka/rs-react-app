@@ -1,16 +1,17 @@
+import styles from './card.module.css';
 import { ReactNode, useEffect, useState } from 'react';
-import { Character } from '../../types';
-import './card.css';
-import getCharId from '../../utils/get-character-id';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Character } from '@/types';
+import getCharId from '@/utils/get-character-id';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addToSelected,
   removeFromSelected,
-} from '../../store/selected-cards-slice';
-import HeartIcon from '../icons/heart-icon';
-import { StoreRootState } from '../../store/store';
+} from '@/store/selected-cards-slice';
+import { HeartIcon } from '@/components/icons';
+import { StoreRootState } from '@/store/store';
 import isCardSelected from './is-card-selected';
+import { useRouter } from 'next/router';
+import getSearchQuery from '@/utils/get-search-query';
 
 const Card = ({ char }: { char: Character }): ReactNode => {
   const charId = getCharId(char.url);
@@ -20,8 +21,7 @@ const Card = ({ char }: { char: Character }): ReactNode => {
   const [isSelected, setIsSelected] = useState(() =>
     isCardSelected(selectedCards, charId)
   );
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const router = useRouter();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const Card = ({ char }: { char: Character }): ReactNode => {
 
   const showDetails = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
-    navigate(`details/${charId}/?${searchParams.toString()}`);
+    router.push(`/details/${charId}${getSearchQuery({ ...router.query })}`);
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,9 +41,9 @@ const Card = ({ char }: { char: Character }): ReactNode => {
   };
 
   return (
-    <div id={charId} className="card" key={charId} onClick={showDetails}>
-      <h2 className="card__title">{char.name}</h2>
-      <div className="card__description">
+    <div id={charId} className={styles.card} key={charId} onClick={showDetails}>
+      <h2 className={styles['card__title']}>{char.name}</h2>
+      <div className={styles['card__description']}>
         <p>
           height: <span>{char.height}</span>
         </p>
@@ -57,7 +57,7 @@ const Card = ({ char }: { char: Character }): ReactNode => {
         }}
       >
         <input
-          className="card__checkbox"
+          className={styles['card__checkbox']}
           type="checkbox"
           checked={isSelected}
           onClick={(event) => {

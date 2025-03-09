@@ -1,11 +1,10 @@
-import './flyout.css';
+import styles from './flyout.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReactNode } from 'react';
-import { StoreRootState } from '../../store/store';
-import { Character } from '../../types';
-import Button from '../button/button';
-import { unselectAll } from '../../store/selected-cards-slice';
-import { Link } from 'react-router-dom';
+import { StoreRootState } from '@/store/store';
+import { Character } from '@/types';
+import Button from '@/components/button';
+import { unselectAll } from '@/store/selected-cards-slice';
 import getBlobParts from './get-blob-parts';
 
 const Flyout = (): ReactNode => {
@@ -25,32 +24,37 @@ const Flyout = (): ReactNode => {
 
   if (isFlyoutVisible)
     return (
-      <div className="flyout" onClick={(event) => event.stopPropagation()}>
+      <div
+        className={styles.flyout}
+        onClick={(event) => event.stopPropagation()}
+      >
         <div>
           <p>
             Selected&nbsp;cards: <span>{selectedCards.length}</span>
           </p>
           <Button
             buttonText="Unselect&nbsp;all"
-            callback={(event) => {
+            onClick={(event) => {
               event.stopPropagation();
               dispatch(unselectAll());
             }}
           />
-          <Link
-            to={getUrl()}
+          <a
+            href={getUrl()}
             download={`${selectedCards.length}_characters.csv`}
           >
             <Button
               buttonText="Download"
-              callback={(event) => {
+              onClick={(event) => {
                 event.stopPropagation();
               }}
             />
-          </Link>
+          </a>
         </div>
       </div>
     );
-  else return null;
+
+  return null;
 };
+
 export default Flyout;

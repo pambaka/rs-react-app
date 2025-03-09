@@ -1,59 +1,69 @@
-import './pagination.css';
-import { ReactNode, useEffect, useState } from 'react';
-import Button from '../button/button';
+import styles from './pagination.module.css';
+import { ReactNode, useContext, useEffect, useState } from 'react';
+import Button from '@/components/button';
 import changeCurrentPageNumber from './change-current-page-number';
-import { PageAction } from '../../types';
-import { PARAMS } from '../../consts';
-import { useSearchParams } from 'react-router-dom';
-import getValidPageNumber from '../../utils/get-valid-page-number';
+import { PageAction } from '@/types';
+import { PARAMS } from '@/consts';
+import getValidPageNumber from '@/utils/get-valid-page-number';
+import { useRouter } from 'next/router';
+import assertString from '@/utils/assert-string';
+import getSearchQuery from '@/utils/get-search-query';
+import getPath from '@/utils/get-path';
+import { ResponseContext } from '@/context/response-context';
+import isPageButtonDisabled from './is-page-button-disabled';
 
-function Pagination(props: {
-  isNextDisabled: boolean;
-  isPrevDisabled: boolean;
-}): ReactNode {
-  const [searchParams, setSearchParams] = useSearchParams({});
-  const [currentPageNumber, setCurrentPageNumber] = useState(() => {
-    const page = searchParams.get(PARAMS.page);
-    return getValidPageNumber(page);
-  });
+const Pagination = (): ReactNode => {
+  const router = useRouter();
+  const page = assertString(router.query[PARAMS.page]);
+  const [currentPageNumber, setCurrentPageNumber] = useState(() =>
+    getValidPageNumber(page)
+  );
+  const [isNextDisabled, setIsNextDisabled] = useState(false);
+  const [isPrevDisabled, setIsPrevDisabled] = useState(false);
+  const { swResponse } = useContext(ResponseContext);
 
-  async function updatePageNumber(action: PageAction) {
+  useEffect(() => {
+    setIsNextDisabled(isPageButtonDisabled(swResponse?.next));
+    setIsPrevDisabled(isPageButtonDisabled(swResponse?.previous));
+  }, [swResponse]);
+
+  const updatePageNumber = async (action: PageAction) => {
     const newPageNumber = changeCurrentPageNumber(currentPageNumber, action);
     if (newPageNumber === currentPageNumber) return;
 
-    const searchValue = searchParams.get(PARAMS.search) ?? '';
-    setSearchParams({
-      [PARAMS.search]: searchValue,
-      [PARAMS.page]: `${newPageNumber}`,
-    });
-  }
+    const search = assertString(router.query[PARAMS.search]);
+
+    router.push(
+      getPath(router.query.charid) +
+        getSearchQuery({ search, page: String(newPageNumber) })
+    );
+  };
 
   useEffect(() => {
-    const page = searchParams.get(PARAMS.page);
     setCurrentPageNumber(getValidPageNumber(page));
-  }, [searchParams]);
+  }, [page]);
 
   return (
-    <div className="pagination">
+    <div className={styles.pagination}>
       <Button
         buttonText="<"
-        callback={(event) => {
+        onClick={(event) => {
           event.stopPropagation();
           updatePageNumber('decrement');
         }}
-        isDisabled={props.isPrevDisabled}
+        isDisabled={isPrevDisabled}
       />
       <p>{currentPageNumber}</p>
       <Button
         buttonText=">"
-        callback={(event) => {
+        onClick={(event) => {
           event.stopPropagation();
           updatePageNumber('increment');
         }}
-        isDisabled={props.isNextDisabled}
+        isDisabled={isNextDisabled}
       />
     </div>
   );
-}
+};
 
 export default Pagination;
