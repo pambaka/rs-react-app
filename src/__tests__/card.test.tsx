@@ -1,8 +1,6 @@
 import Card from '@/components/card/';
 import { describe, expect, it, Mock, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import store from '@/store/store';
 import { useRouter } from 'next/router';
 
 vi.mock('next/router', () => ({
@@ -19,11 +17,7 @@ describe('Detailed card component', () => {
   };
   (useRouter as Mock).mockReturnValue(mockRouter);
 
-  render(
-    <Provider store={store}>
-      <Card />
-    </Provider>
-  );
+  render(<Card />);
 
   it('Renders detailed card component', () => {
     const card = screen.getByTestId('detailedCard');

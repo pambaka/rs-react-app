@@ -1,8 +1,6 @@
 import { ReactNode } from 'react';
 import { GetServerSideProps } from 'next';
 import { CharResponse, Response } from '@/types';
-import { Provider } from 'react-redux';
-import store from '@/store/store';
 import MainPage from '@/components/pages/main-page';
 import assertString from '@/utils/assert-string';
 import { useRouter } from 'next/router';
@@ -12,6 +10,7 @@ import getCharacter from '@/api/get-character';
 import { ResponseContext } from '@/context/response-context';
 import { CharResponseContext } from '@/context/char-response-context';
 import Head from 'next/head';
+import StoreProvider from '@/providers/store-provider';
 
 export const getServerSideProps = (async (context) => {
   const search = assertString(context.query.search);
@@ -42,7 +41,7 @@ const Page = ({
       <Head>
         <title>SW React app | Details</title>
       </Head>
-      <Provider store={store}>
+      <StoreProvider>
         <ResponseContext.Provider value={response}>
           <MainPage />
         </ResponseContext.Provider>
@@ -51,7 +50,7 @@ const Page = ({
             <Card />
           </CharResponseContext.Provider>
         )}
-      </Provider>
+      </StoreProvider>
     </>
   );
 };
