@@ -1,8 +1,9 @@
 import './card.css';
 import { useNavigate, useSearchParams } from 'react-router';
-import { type ReactNode } from 'react';
+import { useContext, type ReactNode } from 'react';
 import { type Character } from '@/types';
 import CardDetails from '@/components/card-details';
+import { LoaderContext } from '@/providers/loader-provider';
 
 const Card = ({
   char,
@@ -13,8 +14,10 @@ const Card = ({
 }): ReactNode => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { changeIsLoading } = useContext(LoaderContext);
 
   const closeCard = () => {
+    changeIsLoading(true);
     navigate(`/?${searchParams.toString()}`);
   };
 

@@ -1,11 +1,12 @@
 import './pagination.css';
-import { type ReactNode, useEffect, useState } from 'react';
+import { type ReactNode, useContext, useEffect, useState } from 'react';
 import Button from '../button';
 import changeCurrentPageNumber from './change-current-page-number';
 import { type PageAction } from '@/types';
 import { PARAMS } from '@/consts';
 import { useSearchParams } from 'react-router';
 import getValidPageNumber from '@/utils/get-valid-page-number';
+import { LoaderContext } from '@/providers/loader-provider';
 
 const Pagination = ({
   isNextDisabled,
@@ -19,8 +20,11 @@ const Pagination = ({
     const page = searchParams.get(PARAMS.page);
     return getValidPageNumber(page);
   });
+  const { changeIsLoading } = useContext(LoaderContext);
 
   const updatePageNumber = async (action: PageAction) => {
+    changeIsLoading(true);
+
     const newPageNumber = changeCurrentPageNumber(currentPageNumber, action);
     if (newPageNumber === currentPageNumber) return;
 

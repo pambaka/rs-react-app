@@ -4,6 +4,10 @@ import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
 import type { Route } from './+types/root';
 import ThemeProvider from './providers/theme-provider';
 import FallbackUi from './components/fallback-ui';
+import Loader from './components/loader';
+import LoaderProvider from './providers/loader-provider';
+import { Suspense } from 'react';
+import { NavigationEvents } from './navigation-events';
 
 export const links: Route.LinksFunction = () => [
   { rel: 'icon', type: 'image/svg+xml', href: '/sun.svg' },
@@ -31,7 +35,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <ThemeProvider>
           <div id="root">
-            <div className="app">{children}</div>
+            <div className="app">
+              <LoaderProvider>
+                {children}
+                <Loader />
+                <Suspense fallback={null}>
+                  <NavigationEvents />
+                </Suspense>
+              </LoaderProvider>
+            </div>
           </div>
         </ThemeProvider>
         <ScrollRestoration />

@@ -1,25 +1,21 @@
 import './search-section.css';
-import { type ChangeEvent, type ReactNode, useState } from 'react';
+import { type ChangeEvent, type ReactNode, useContext, useState } from 'react';
 import Button from '../button';
 import { useSearchParams } from 'react-router';
 import { PARAMS } from '@/consts';
-import isValidPageNumber from '@/utils/is-valid-page-number';
+import { LoaderContext } from '@/providers/loader-provider';
 
 const SearchSection = (): ReactNode => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchValue, setSearchValue] = useState(
-    searchParams.get(PARAMS.search) ?? ''
-  );
   const [inputValue, setInputValue] = useState(() => {
-    const search = searchParams.get(PARAMS.search);
-    const page = searchParams.get(PARAMS.page);
-    if (!search && !isValidPageNumber(page)) return searchValue;
-    return search ?? '';
+    return searchParams.get(PARAMS.search) ?? '';
   });
+  const { changeIsLoading } = useContext(LoaderContext);
 
   const handleClick = async () => {
-    setSearchValue(inputValue);
-    setSearchParams({ search: inputValue });
+    const trimValue = inputValue.trim();
+    if (trimValue !== searchParams.get(PARAMS.search)) changeIsLoading(true);
+    setSearchParams({ search: trimValue });
   };
 
   const handleChange = (event: ChangeEvent) => {

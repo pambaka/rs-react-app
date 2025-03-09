@@ -1,9 +1,9 @@
 import './card.css';
-import { type ReactNode, useEffect, useState } from 'react';
+import { type ReactNode, useContext, useEffect, useState } from 'react';
 import { type Character } from '@/types';
 import getCharId from '@/utils/get-character-id';
 import HeartIcon from '../icons/heart-icon';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useNavigate, useParams, useSearchParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addToSelected,
@@ -11,6 +11,7 @@ import {
 } from '@/store/selected-cards-slice';
 import { type StoreRootState } from '@/store/store';
 import isCardSelected from './is-card-selected';
+import { LoaderContext } from '@/providers/loader-provider';
 
 const Card = ({ char }: { char: Character }): ReactNode => {
   const charId = getCharId(char.url);
@@ -22,7 +23,9 @@ const Card = ({ char }: { char: Character }): ReactNode => {
   );
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const params = useParams();
   const dispatch = useDispatch();
+  const { changeIsLoading } = useContext(LoaderContext);
 
   useEffect(() => {
     setIsSelected(isCardSelected(selectedCards, charId));
@@ -30,6 +33,7 @@ const Card = ({ char }: { char: Character }): ReactNode => {
 
   const showDetails = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
+    if (charId !== params.charid) changeIsLoading(true);
     navigate(`details/${charId}/?${searchParams.toString()}`);
   };
 

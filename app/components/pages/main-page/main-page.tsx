@@ -1,5 +1,5 @@
 import './main-page.css';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import SearchSection from '@/components/search-section';
 import ResultsSection from '@/components/results-section';
 import Pagination, { isPageButtonDisabled } from '@/components/pagination';
@@ -7,6 +7,7 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router';
 import Flyout from '@/components/flyout';
 import ThemeButton from '@/components/theme-button';
 import type { SwResponse } from '@/types';
+import { LoaderContext } from '@/providers/loader-provider';
 
 const MainPage = ({
   response,
@@ -23,6 +24,7 @@ const MainPage = ({
   const [isOutletOpen, setIsOutletOpen] = useState(
     location.pathname.includes('details')
   );
+  const { changeIsLoading } = useContext(LoaderContext);
 
   useEffect(() => {
     setIsNextDisabled(isPageButtonDisabled(response?.next));
@@ -35,6 +37,7 @@ const MainPage = ({
   }, [location.pathname]);
 
   const closeOutlet = (): void => {
+    changeIsLoading(true);
     navigate(`/?${searchParams.toString()}`);
   };
 
