@@ -38,8 +38,9 @@ const SearchSection = (): ReactNode => {
 
   const handleClick = async () => {
     changeIsLoading(true);
-    setSearchValue(inputValue);
-    router.push(pathname + getSearchQuery({ search: inputValue }));
+    const trimValue = inputValue.trim();
+    setSearchValue(trimValue);
+    router.push(pathname + getSearchQuery({ search: trimValue }));
   };
 
   const handleChange = (event: ChangeEvent) => {
