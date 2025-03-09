@@ -1,7 +1,7 @@
-import Card from '../components/cards/cards';
+import Card from '@/components/cards/card';
 import { describe, expect, it } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { getChar, mockChar, mockStore } from './mocks';
 import { Provider } from 'react-redux';
 
@@ -13,7 +13,7 @@ describe('Card component', () => {
     <Provider store={mockStore}>
       <BrowserRouter>
         <div data-testid={testId}>
-          <Card people={[getChar(id)]} />
+          <Card char={getChar(id)} />
         </div>
       </BrowserRouter>
     </Provider>

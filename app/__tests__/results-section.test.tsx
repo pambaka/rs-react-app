@@ -1,10 +1,10 @@
-import ResultsSection from '../components/results-section/results-section';
-import { MemoryRouter } from 'react-router-dom';
-import { Character } from '../types';
+import ResultsSection from '@/components/results-section';
+import { MemoryRouter } from 'react-router';
+import { type Character } from '@/types';
 import { cleanup, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { getChar, mockStore } from './mocks';
-import { MESSAGES } from '../consts';
+import { getChar, mockChar, mockStore } from './mocks';
+import { MESSAGES } from '@/consts';
 import { Provider } from 'react-redux';
 
 describe('Results section component', () => {
@@ -36,7 +36,7 @@ describe('Results section component', () => {
       </Provider>
     );
 
-    const cards = screen.getAllByText('someName');
+    const cards = screen.getAllByText(mockChar.name);
     expect(cards.length).toBe(numberOfChar);
   });
 });

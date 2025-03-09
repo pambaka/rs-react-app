@@ -1,9 +1,9 @@
-import Flyout from '../components/flyout/flyout';
+import Flyout from '@/components/flyout';
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { mockStore } from './mocks';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 
 URL.createObjectURL = vi.fn();
 

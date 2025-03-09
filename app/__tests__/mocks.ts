@@ -1,6 +1,6 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { URL } from '../consts';
-import { Character } from '../types';
+import { URL } from '@/consts';
+import { type Character } from '@/types';
 
 export const mockChar: Character = {
   name: 'someName',

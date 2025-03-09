@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import Pagination from '../components/pagination/pagination';
-import { PARAMS } from '../consts';
+import Pagination from '@/components/pagination';
+import { PARAMS } from '@/consts';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 
 describe('Pagination component', () => {
   it('The component updates URL query parameter when page changes', async () => {

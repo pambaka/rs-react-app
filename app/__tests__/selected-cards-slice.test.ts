@@ -1,6 +1,6 @@
-import { selectedCardsSlice } from '../store/selected-cards-slice';
+import { selectedCardsSlice } from '@/store/selected-cards-slice';
 import { describe, expect, it } from 'vitest';
-import { Character } from '../types';
+import { type Character } from '@/types';
 import { mockChar, getChar } from './mocks';
 
 describe('Selected cards slice', () => {

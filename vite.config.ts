@@ -6,7 +6,7 @@ console.log('dirname', __dirname);
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [reactRouter()],
+  plugins: [!process.env.VITEST && reactRouter()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './app'),

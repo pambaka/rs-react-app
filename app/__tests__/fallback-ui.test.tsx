@@ -1,4 +1,4 @@
-import FallbackUi from '../components/fallback-ui/fallback-ui';
+import FallbackUi from '@/components/fallback-ui';
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
