@@ -1,9 +1,17 @@
 import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
+import { reactRouter } from '@react-router/dev/vite';
+import path from 'node:path';
+
+console.log('dirname', __dirname);
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [!process.env.VITEST && reactRouter()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './app'),
+    },
+  },
   test: {
     environment: 'jsdom',
     coverage: {
